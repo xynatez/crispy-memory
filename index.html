@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI AIR Lab - Application Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* A lighter, cooler gray */
+        }
+        .hero-bg {
+            background-color: #0d1a2e;
+            background-image: 
+                radial-gradient(at 20% 25%, hsla(212,60%,25%,0.3) 0px, transparent 50%),
+                radial-gradient(at 80% 75%, hsla(220,70%,30%,0.3) 0px, transparent 50%);
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .form-section {
+            transition: all 0.3s ease-in-out;
+        }
+        [data-state="active"] {
+            color: #2563eb; /* blue-600 */
+            border-color: #2563eb; /* blue-600 */
+            font-weight: 600;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.7); }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .slide-up {
+            transform: translateY(50px);
+        }
+
+        .is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Custom file input */
+        .custom-file-input::-webkit-file-upload-button {
+            visibility: hidden;
+        }
+        .custom-file-input::before {
+            content: 'Select file';
+            display: inline-block;
+            background: #eef2ff; /* indigo-50 */
+            color: #3730a3; /* indigo-800 */
+            border-radius: 9999px;
+            padding: 0.5rem 1rem;
+            outline: none;
+            white-space: nowrap;
+            -webkit-user-select: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-right: 1rem;
+            transition: all 0.2s;
+        }
+        .custom-file-input:hover::before {
+             background: #e0e7ff; /* indigo-100 */
+        }
+        .file-name {
+            font-size: 0.875rem;
+            color: #4b5563; /* gray-600 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-md">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-black text-gray-900 tracking-tighter">UI<span class="text-blue-600">.AIR</span></a>
+            <div class="hidden md:flex items-center space-x-8 font-medium">
+                <a href="#about" class="text-gray-600 hover:text-blue-600 transition-colors">About</a>
+                <a href="#criteria" class="text-gray-600 hover:text-blue-600 transition-colors">Criteria</a>
+                <a href="#benefits" class="text-gray-600 hover:text-blue-600 transition-colors">Benefits</a>
+                <a href="#apply" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow-lg transform hover:-translate-y-0.5">Apply Now</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-100">
+                <i data-lucide="menu" class="h-6 w-6"></i>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#about" class="block py-2 text-gray-600 hover:text-blue-600">About</a>
+            <a href="#criteria" class="block py-2 text-gray-600 hover:text-blue-600">Criteria</a>
+            <a href="#benefits" class="block py-2 text-gray-600 hover:text-blue-600">Benefits</a>
+            <a href="#apply" class="block mt-2 bg-blue-600 text-white text-center px-4 py-2 rounded-md hover:bg-blue-700">Apply Now</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white overflow-hidden">
+        <div class="container mx-auto px-6 py-28 text-center">
+            <h1 class="text-4xl md:text-6xl font-black leading-tight tracking-tighter animate-on-scroll slide-up">Call for the Uncommon Mind</h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto animate-on-scroll slide-up" style="transition-delay: 150ms;">This is not a call for students. This is a call for anomalies. For those who don't just learn knowledge—they build new ways of knowing.</p>
+            <div class="mt-10 animate-on-scroll slide-up" style="transition-delay: 300ms;">
+                <a href="#apply" class="bg-white text-blue-700 font-bold px-8 py-4 rounded-lg hover:bg-gray-200 transition-transform transform hover:scale-105 inline-block shadow-lg hover:shadow-2xl">
+                    Begin Your Application
+                </a>
+                <p class="mt-4 text-sm text-gray-400">Application Deadline: October 31, 2025</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 md:p-8">
+
+        <!-- About Section -->
+        <section id="about" class="py-20">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="bg-white p-8 rounded-xl shadow-lg animate-on-scroll slide-up">
+                     <h2 class="text-3xl font-bold text-gray-900 mb-4 tracking-tight">About the Lab</h2>
+                     <p class="text-gray-600 mb-4 leading-relaxed">A student-initiated research group at Universitas Indonesia, dedicated to addressing complex, real-world challenges through interdisciplinary inquiry, bridging science, technology, and society.</p>
+                     <p class="text-gray-600 leading-relaxed">The lab explores unsolved problems and develops human-centered solutions with academic rigor and global relevance.</p>
+                </div>
+                 <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-xl shadow-2xl p-8 text-center animate-on-scroll slide-up" style="transition-delay: 150ms;">
+                    <h3 class="text-2xl font-bold">Our Mission</h3>
+                    <p class="mt-3 text-xl italic font-light opacity-90">"To accelerate human civilization through interdisciplinary intelligence and systemic problem solving."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- "Why You'll Fit In" Section -->
+        <section class="py-20 animate-on-scroll slide-up">
+             <h2 class="text-3xl font-bold text-center mb-12 tracking-tight">Why You'll Fit In</h2>
+             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1">
+                    <i data-lucide="brain-circuit" class="w-10 h-10 text-blue-500 mb-4"></i>
+                    <h4 class="font-bold text-lg">You Think Differently</h4>
+                    <p class="text-gray-600 mt-2 text-sm">If you see patterns across disparate fields and feel constrained by traditional academic paths, you've found your tribe.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1">
+                    <i data-lucide="rocket" class="w-10 h-10 text-blue-500 mb-4"></i>
+                    <h4 class="font-bold text-lg">You're Ambitious</h4>
+                    <p class="text-gray-600 mt-2 text-sm">Ideas others call "too ambitious" are our starting point. We tackle global-scale challenges head-on.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1">
+                    <i data-lucide="atom" class="w-10 h-10 text-blue-500 mb-4"></i>
+                    <h4 class="font-bold text-lg">You Build Things</h4>
+                    <p class="text-gray-600 mt-2 text-sm">This is more than a think tank. We build tools, frameworks, and real-world solutions, not just papers.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Membership Criteria Section -->
+        <section id="criteria" class="py-20">
+            <h2 class="text-3xl font-bold text-center mb-12 tracking-tight">Membership Criteria</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Standard Path -->
+                <div class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-blue-500 animate-on-scroll slide-up">
+                    <div class="flex items-center mb-4">
+                        <i data-lucide="award" class="w-8 h-8 text-blue-500 mr-4"></i>
+                        <h3 class="text-2xl font-bold text-blue-800">Standard Path</h3>
+                    </div>
+                    <ul class="space-y-4 text-gray-600">
+                        <li class="flex items-start"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mr-3 mt-1 shrink-0"></i><span><strong>Official IQ Score ≥ 140</strong> from accepted assessments (Mensa, WAIS-IV, etc.).</span></li>
+                        <li class="flex items-start"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mr-3 mt-1 shrink-0"></i><span><strong>Mastery of 3+ academic disciplines</strong>, with one from the Core Six (Math, CS, Physics, Medicine, Psychology, Economics).</span></li>
+                        <li class="flex items-start"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mr-3 mt-1 shrink-0"></i><span><strong>Demonstrable history of original thought</strong> (designing frameworks, independent research).</span></li>
+                    </ul>
+                </div>
+                <!-- Exceptional Path -->
+                <div class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-green-500 animate-on-scroll slide-up" style="transition-delay: 150ms;">
+                    <div class="flex items-center mb-4">
+                         <i data-lucide="zap" class="w-8 h-8 text-green-500 mr-4"></i>
+                        <h3 class="text-2xl font-bold text-green-800">Exceptional Path</h3>
+                    </div>
+                    <p class="mb-4 text-gray-600">Waives formal requirements if you have a history of profound impact.</p>
+                    <ul class="space-y-4 text-gray-600">
+                        <li class="flex items-start"><i data-lucide="sparkles" class="w-5 h-5 text-yellow-500 mr-3 mt-1 shrink-0"></i><span>Solved a revolutionary problem.</span></li>
+                        <li class="flex items-start"><i data-lucide="sparkles" class="w-5 h-5 text-yellow-500 mr-3 mt-1 shrink-0"></i><span>Created breakthrough solutions with real-world impact.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Benefits Section -->
+        <section id="benefits" class="py-20 animate-on-scroll slide-up">
+            <div class="bg-gray-900 text-white rounded-xl shadow-2xl overflow-hidden">
+                <div class="p-10">
+                    <h2 class="text-3xl font-bold text-center mb-12">Member Benefits</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10 max-w-7xl mx-auto">
+                        <div class="flex items-start"><i data-lucide="user-check" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Expert Mentorship</h4><p class="text-gray-300">Direct guidance from world-class researchers.</p></div></div>
+                        <div class="flex items-start"><i data-lucide="trending-up" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Academic Acceleration</h4><p class="text-gray-300">Fast-tracked visibility for elite graduate programs.</p></div></div>
+                        <div class="flex items-start"><i data-lucide="atom" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Research Opportunities</h4><p class="text-gray-300">Access to cutting-edge research projects.</p></div></div>
+                        <div class="flex items-start"><i data-lucide="file-text" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Publication Support</h4><p class="text-gray-300">Joint authorship on high-impact publications.</p></div></div>
+                        <div class="flex items-start"><i data-lucide="users" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Peer Network</h4><p class="text-gray-300">Collaborate with other exceptional minds.</p></div></div>
+                        <div class="flex items-start"><i data-lucide="git-merge" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Cross-Level Learning</h4><p class="text-gray-300">Unique learning across all academic levels.</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Application Form Section -->
+        <section id="apply" class="py-20 animate-on-scroll slide-up">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold mb-2 text-center tracking-tight">Application Form</h2>
+                <p class="text-center text-gray-500 mb-8">We don't care about your GPA—we care about your thinking.</p>
+                
+                <div class="border-b border-gray-200 mb-8">
+                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                        <button id="step-btn-1" data-state="active" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Step 1: Personal</button>
+                        <button id="step-btn-2" data-state="inactive" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">Step 2: Details</button>
+                        <button id="step-btn-3" data-state="inactive" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">Step 3: Statement</button>
+                    </nav>
+                </div>
+                
+                <form id="multiStepForm" class="space-y-6">
+                    <!-- Step 1: Personal Information -->
+                    <div id="step-1" class="step active">
+                        <fieldset class="space-y-4">
+                            <legend class="text-xl font-semibold mb-4 text-gray-800">Personal Information</legend>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                                    <input type="text" id="fullName" name="fullName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                                    <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label for="university" class="block text-sm font-medium text-gray-700">University / High School</label>
+                                    <input type="text" id="university" name="university" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label for="academicLevel" class="block text-sm font-medium text-gray-700">Current Academic Level</label>
+                                    <select id="academicLevel" name="academicLevel" required class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Select Level</option>
+                                        <option value="high_school">High School Student</option>
+                                        <option value="undergraduate">Undergraduate Student</option>
+                                        <option value="master">Master's Student</option>
+                                        <option value="phd">PhD Candidate</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <!-- Step 2: Application Details -->
+                    <div id="step-2" class="step">
+                        <fieldset>
+                             <legend class="text-xl font-semibold mb-4 text-gray-800">Application Details</legend>
+                             <div class="mb-6">
+                                 <label class="block text-sm font-medium text-gray-700 mb-2">Application Path</label>
+                                 <div class="flex gap-4">
+                                     <label for="standardPath" class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer flex-1 has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500 transition-all"><input id="standardPath" name="applicationPath" type="radio" value="standard" required class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 mr-3">Standard Path</label>
+                                     <label for="exceptionalPath" class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer flex-1 has-[:checked]:bg-green-50 has-[:checked]:border-green-500 transition-all"><input id="exceptionalPath" name="applicationPath" type="radio" value="exceptional" class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 mr-3">Exceptional Path</label>
+                                 </div>
+                             </div>
+                             <div id="iqScoreSection" class="form-section hidden mb-6">
+                                 <label for="iqScore" class="block text-sm font-medium text-gray-700">Official IQ Score</label>
+                                 <input type="number" id="iqScore" name="iqScore" placeholder="e.g., 145" class="mt-1 block w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                             </div>
+                             <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Document Upload</label>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="portfolio" class="block text-xs font-medium text-gray-600">Portfolio & Proof of Work (Required)</label>
+                                        <div class="flex items-center mt-1"><input type="file" id="portfolio" name="portfolio" required class="custom-file-input"><span class="file-name">No file selected</span></div>
+                                    </div>
+                                    <div id="iqProofSection" class="form-section hidden">
+                                        <label for="iqProof" class="block text-xs font-medium text-gray-600">Proof of IQ Score (Required for Standard Path)</label>
+                                        <div class="flex items-center mt-1"><input type="file" id="iqProof" name="iqProof" class="custom-file-input"><span class="file-name">No file selected</span></div>
+                                    </div>
+                                    <div>
+                                        <label for="recommendation" class="block text-xs font-medium text-gray-600">Letters of Recommendation (Optional)</label>
+                                        <div class="flex items-center mt-1"><input type="file" id="recommendation" name="recommendation" class="custom-file-input"><span class="file-name">No file selected</span></div>
+                                    </div>
+                                </div>
+                             </div>
+                        </fieldset>
+                    </div>
+                    
+                    <!-- Step 3: Personal Statement -->
+                    <div id="step-3" class="step">
+                        <fieldset>
+                            <legend class="text-xl font-semibold mb-4 text-gray-800">Personal Statement</legend>
+                            <div>
+                                <label for="statement" class="block text-sm font-medium text-gray-700">Explain your interdisciplinary approach and why you are a fit for the UI AIR Lab.</label>
+                                <textarea id="statement" name="statement" rows="8" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-6">
+                        <button type="button" id="prevBtn" class="bg-gray-200 text-gray-800 font-semibold px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+                        <div>
+                            <button type="button" id="nextBtn" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md transform hover:-translate-y-0.5">Next</button>
+                            <button type="submit" id="submitBtn" class="hidden bg-green-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-sm hover:shadow-md transform hover:-translate-y-0.5">Submit Application</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-12">
+        <div class="container mx-auto p-10 text-center">
+            <a href="#" class="text-2xl font-black text-white tracking-tighter">UI<span class="text-blue-400">.AIR</span></a>
+            <p class="mt-4 text-gray-400">&copy; 2025 UI AIR Lab - Universitas Indonesia</p>
+            <p class="mt-2 text-sm text-gray-500">
+                Questions? Contact us at <a href="mailto:airlab@ui.ac.id" class="underline hover:text-blue-300">airlab@ui.ac.id</a>
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                           <i data-lucide="check" class="h-6 w-6 text-green-600"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Application Submitted!</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    Thank you for applying to the UI AIR Lab. Your application is under review. We will respond within a maximum of 5 days.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="closeModal" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Animation on Scroll ---
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                observer.observe(el);
+            });
+
+            // --- Mobile Menu ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // --- Multi-step Form ---
+            const steps = Array.from(document.querySelectorAll('.step'));
+            const stepButtons = Array.from(document.querySelectorAll('nav[aria-label="Tabs"] button'));
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const form = document.getElementById('multiStepForm');
+            let currentStep = 0;
+
+            function updateButtons() {
+                prevBtn.disabled = currentStep === 0;
+                if (currentStep === steps.length - 1) {
+                    nextBtn.classList.add('hidden');
+                    submitBtn.classList.remove('hidden');
+                } else {
+                    nextBtn.classList.remove('hidden');
+                    submitBtn.classList.add('hidden');
+                }
+            }
+
+            function showStep(stepIndex) {
+                steps.forEach((step, index) => {
+                    step.classList.toggle('active', index === stepIndex);
+                });
+                stepButtons.forEach((btn, index) => {
+                    btn.setAttribute('data-state', index === stepIndex ? 'active' : 'inactive');
+                });
+                currentStep = stepIndex;
+                updateButtons();
+            }
+            
+            function validateStep(stepIndex) {
+                const currentStepElement = steps[stepIndex];
+                if (!currentStepElement) return false;
+                
+                const currentStepInputs = currentStepElement.querySelectorAll('[required]');
+                let isValid = true;
+                currentStepInputs.forEach(input => {
+                    if (!input.reportValidity()) {
+                        isValid = false;
+                    }
+                });
+                return isValid;
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (validateStep(currentStep) && currentStep < steps.length - 1) {
+                    showStep(currentStep + 1);
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentStep > 0) {
+                    showStep(currentStep - 1);
+                }
+            });
+
+            showStep(0);
+
+            // --- Conditional Fields for Application Path ---
+            const standardPathRadio = document.getElementById('standardPath');
+            const exceptionalPathRadio = document.getElementById('exceptionalPath');
+            const iqScoreSection = document.getElementById('iqScoreSection');
+            const iqProofSection = document.getElementById('iqProofSection');
+            const iqScoreInput = document.getElementById('iqScore');
+            const iqProofInput = document.getElementById('iqProof');
+
+            function handlePathChange() {
+                if (standardPathRadio.checked) {
+                    iqScoreSection.classList.remove('hidden');
+                    iqProofSection.classList.remove('hidden');
+                    iqScoreInput.required = true;
+                    iqProofInput.required = true;
+                } else {
+                    iqScoreSection.classList.add('hidden');
+                    iqProofSection.classList.add('hidden');
+                    iqScoreInput.required = false;
+                    iqProofInput.required = false;
+                }
+            }
+            standardPathRadio.addEventListener('change', handlePathChange);
+            exceptionalPathRadio.addEventListener('change', handlePathChange);
+            
+            // --- Custom File Input Labels ---
+            document.querySelectorAll('.custom-file-input').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const fileName = e.target.files[0] ? e.target.files[0].name : 'No file selected';
+                    const fileNameSpan = e.target.nextElementSibling;
+                    if(fileNameSpan && fileNameSpan.classList.contains('file-name')) {
+                        fileNameSpan.textContent = fileName;
+                    }
+                });
+            });
+
+            // --- Modal Logic ---
+            const modal = document.getElementById('successModal');
+            const closeModalButton = document.getElementById('closeModal');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (validateStep(currentStep)) {
+                    modal.classList.remove('hidden');
+                    lucide.createIcons(); // Rerender icons in modal
+                }
+            });
+
+            closeModalButton.addEventListener('click', function() {
+                modal.classList.add('hidden');
+                form.reset();
+                showStep(0);
+                handlePathChange();
+                // Reset file input labels
+                document.querySelectorAll('.file-name').forEach(span => span.textContent = 'No file selected');
+            });
+        });
+    </script>
+</body>
+</html>
