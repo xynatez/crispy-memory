@@ -127,9 +127,9 @@
     <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center">
+                <a href="#home" class="flex items-center">
                     <span class="text-2xl font-bold text-white">UI<span class="text-blue-500">AIR</span> Lab</span>
-                </div>
+                </a>
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
                     <a href="#about" class="text-gray-300 hover:text-white transition duration-300">About</a>
                     <a href="#criteria" class="text-gray-300 hover:text-white transition duration-300">Criteria</a>
@@ -313,13 +313,52 @@
         <section id="portfolio" class="py-24 sm:py-32 bg-gray-900/50 fade-in-section">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white">A Portfolio for Global Excellence</h2>
-                    <p class="mt-6 text-lg max-w-3xl mx-auto text-gray-400">Our members produce research and publications suitable for applications to the world's most selective universities.</p>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white">Featured Publications</h2>
+                    <p class="mt-6 text-lg max-w-3xl mx-auto text-gray-400">A selection of research showcasing our interdisciplinary approach and impact.</p>
                 </div>
-                <div class="mt-16">
+
+                <!-- Featured Publications -->
+                <div class="mt-20 grid md:grid-cols-2 gap-8">
+                    <div class="glass-card flex flex-col p-8 rounded-2xl">
+                        <span class="text-sm font-semibold text-blue-400">CRYPTOGRAPHY & SECURITY</span>
+                        <h3 class="mt-2 text-xl font-bold text-white">IAST: Irreversible Alwin-Sahira Transform</h3>
+                        <p class="mt-3 text-gray-400 flex-grow">A lightweight, one-way function for data integrity and key derivation, forming the basis of a GeoFence protocol that restricts decryption to specific geographical locations.</p>
+                        <div class="mt-4 text-xs text-gray-500">
+                            <p>TYPE: Technical Report - June 2025</p>
+                        </div>
+                    </div>
+                     <div class="glass-card flex flex-col p-8 rounded-2xl">
+                        <span class="text-sm font-semibold text-purple-400">THEORETICAL COMPUTER SCIENCE</span>
+                        <h3 class="mt-2 text-xl font-bold text-white">Complexity Calculus: A Framework for P vs NP</h3>
+                        <p class="mt-3 text-gray-400 flex-grow">Introduces a novel geometric-entropic mathematical framework designed to tackle the P vs NP conjecture, one of the most profound open problems in computer science.</p>
+                         <div class="mt-4 text-xs text-gray-500">
+                            <p>TYPE: Research Proposal - February 2025</p>
+                        </div>
+                    </div>
+                     <div class="glass-card flex flex-col p-8 rounded-2xl">
+                        <span class="text-sm font-semibold text-pink-400">COMPUTATIONAL BIOLOGY</span>
+                        <h3 class="mt-2 text-xl font-bold text-white">What Is Protein Folding and Why Is It NP-Hard</h3>
+                        <p class="mt-3 text-gray-400 flex-grow">An analysis of the computational complexity of protein folding, focusing on the NP-hardness of structure prediction using the HP lattice model.</p>
+                        <div class="mt-4 text-xs text-gray-500">
+                            <p>TYPE: Research Paper - June 2025</p>
+                        </div>
+                    </div>
+                    <div class="glass-card flex flex-col p-8 rounded-2xl">
+                        <span class="text-sm font-semibold text-green-400">MATHEMATICS EDUCATION</span>
+                        <h3 class="mt-2 text-xl font-bold text-white">A Friendly Introduction to Linear Algebra</h3>
+                        <p class="mt-3 text-gray-400 flex-grow">A beginner-level textbook in Indonesian that offers an intuitive, analogy-driven approach to linear algebra, covering core concepts from equations to vector spaces.</p>
+                        <div class="mt-4 text-xs text-gray-500">
+                            <p>TYPE: Book - June 2025</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-center mt-12 text-gray-400">...and many more.</p>
+
+                <!-- University Logos as a final seal of approval -->
+                <div class="mt-24">
                     <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-6 md:gap-x-16">
-                        <!-- University Logos -->
-                        <div title="MIT" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110" style="filter: drop-shadow(0 0 5px rgba(255,255,255,0)); hover:filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));">
+                        <div title="MIT" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
                              <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>MIT</title><path d="M3.52 17.373h2.112v-3.32h.048c.232.736.56 1.344.984 1.824s.92.864 1.488 1.152.98.432 1.44.432c.576 0 1.028-.12 1.356-.36s.524-.6.524-1.08v-5.088h2.112v5.136c0 .936-.26 1.688-.78 2.256s-1.216.852-2.088.852c-.624 0-1.164-.168-1.62-.504s-.84-.816-1.128-1.44h-.048v1.8h-2.112v-8.88h2.112v3.312h.048c.24-.744.572-1.356.996-1.836s.924-.864 1.49-.152.98-.432 1.44-.432c.576 0 1.028-.12 1.356-.36s.524-.6.524-1.08v-5.088h2.112v5.136c0 .936-.26 1.688-.78 2.256s-1.216.852-2.088.852c-.624 0-1.164-.168-1.62-.504s-.84-.816-1.128-1.44h-.048v1.8h-2.112v-8.88zm8.688 0h2.112v-8.88h-2.112v8.88zm5.688-8.88v8.88h2.112v-6.768h.048l2.256 6.768h2.352l2.256-6.768h.048v6.768h2.112v-8.88h-3.528l-2.208 6.576h-.048L19.16 8.493z"/></svg>
                         </div>
                         <div title="Harvard University" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
@@ -329,7 +368,7 @@
                              <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>University of Oxford</title><path d="M12.001 0C8.204 0 5.122 3.081 5.122 6.878c0 .32.023.633.066.942l.011.083H5.12c-1.39 0-2.517 1.127-2.517 2.517v4.16c0 1.39 1.127 2.518 2.518 2.518h.078l.01-.082c.045.31.067.623.067.943C5.26 20.92 8.342 24 12.14 24c3.796 0 6.877-3.08 6.877-6.877 0-.32-.023-.633-.066-.943l-.011-.082h.078c1.39 0 2.518-1.128 2.518-2.518v-4.16c0-1.39-1.128-2.517-2.518-2.517h-.078l-.01.083c-.045-.31-.067-.623-.067-.943C18.878 3.08 15.797 0 12.001 0zm-.001 2.373c2.49 0 4.504 2.015 4.504 4.505s-2.015 4.505-4.504 4.505-4.505-2.015-4.505-4.505S9.51 2.373 12 2.373zm-6.606 7.02h.384v5.214h-.384zm13.212 0h-.384v5.214h.384zM12.001 12.74c2.49 0 4.504 2.014 4.504 4.504s-2.015 4.505-4.504 4.505-4.505-2.015-4.505-4.505 2.015-4.504 4.505-4.504z"/></svg>
                         </div>
                         <div title="University of Cambridge" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
-                             <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>University of Cambridge</title><path d="M22.396 18.327c-.378-1.137-.84-2.22-1.386-3.249l-.162-.315c-.45-.873-.936-1.71-1.44-2.502-.513-.792-1.044-1.53-1.593-2.205-.54-.666-1.089-1.26-1.647-1.782-.558-.522-1.116-1.008-1.674-1.431l.243.207c.279.243.567.486.864.738.297.252.603.513.918.783l.18.153.36.324.18.153c.27.234.54.468.81.702.27.234.522.459.756.675l.09.081.27.252.27.261.27.27.09.09c.27.27.522.54.756.81l.09.09c.18.18.342.36.486.54l.09.108c.18.27.342.54.486.81.054.108.09.198.126.297l.072.198c.063.18.126.369.18.558l.054.18c.054.18.09.36.126.54l.036.162.036.18c.027.18.054.36.072.54l.018.144c0 .09 0 .18.018.27v.18c0 .09 0 .18.018.27 0 .09 0 .18 0 .27zm-11.43 1.341c.27.18.54.342.81.486.27.144.54.27.81.387l.27.09c.27.09.522.162.783.216.261.054.513.09.765.126h.27c.252 0 .495-.036.738-.072l.27-.054c.252-.054.495-.126.738-.207l.261-.09c.252-.09.495-.198.729-.315.234-.117.459-.243.675-.387l.09-.063c.18-.126.36-.261.522-.405.162-.144.315-.297.459-.459.144-.162.27-.333.387-.513.117-.18.216-.369.315-.567.09-.198.18-.405.252-.612l.063-.207c.054-.18.09-.369.126-.558.036-.189.063-.387.081-.585v-.288c0-.288-.036-.567-.09-.846-.054-.27-.126-.54-.216-.81l-.09-.27c-.09-.27-.198-.531-.315-.792l-.117-.261c-.117-.261-.243-.513-.378-.765-.135-.252-.279-.504-.432-.747-.153-.243-.315-.486-.486-.72-.18-.234-.36-.459-.54-.675-.18-.216-.369-.432-.558-.639-.189-.207-.387-.405-.585-.603-.198-.198-.405-.387-.612-.567-.207-.18-.423-.351-.639-.513l-.216-.162c-.225-.162-.45-.315-.675-.459-.225-.144-.45-.279-.684-.405-.234-.126-.468-.243-.702-.351l-1.026-1.116c-.279-.288-.567-.567-.864-.837-.297-.27-.603-.522-.918-.765l-.63-.486c-.315-.243-.639-.468-.972-.684-.333-.216-.675-.414-1.026-.594l-.36-.189c-.351-.18-.702-.342-1.062-.486l-.369-.144c-.36-.135-.729-.252-1.107-.351-.378-.099-.765-.18-1.161-.234L12 1.359l-.36.018c-.396.054-.783.135-1.161.234-.378.099-.747.216-1.107.351l-.369.144c-.36.144-.711.306-1.062-.486l-.36.189c-.351.18-.693.378-1.026.594-.333.216-.657.441-.972.684l-.63.486c-.315.243-.621.495-.918.765-.297.27-.585.549-.864.837l-1.026 1.116c-.234.108-.468.225-.702.351-.234.126-.459.261-.684.405-.225.144-.45.297-.675.459l-.216.162c-.216.162-.423.333-.639.513-.207.18-.414.369-.612.567-.198.198-.387.396-.585.603-.189.207-.378.414-.558.639-.18.216-.36.441-.54.675-.18.234-.333.477-.486.72-.153.243-.3.495-.432.747-.135.252-.261.504-.378.765l-.117.261c-.117.27-.216.54-.315.792l-.09.27c-.09.27-.162.54-.216.81-.054.279-.09.558-.09.846v.288c0 .198.018.396.081.585.063.189.126.369.126.558l.063.207c.09.207.18.414.252.612.099.198.198.387.315.567.117.18.243.351.387.513.144.162.315.315.459.459.162.144.342.279.522.405l.09.063c.216.144.441.261.675.387.234.117.477.216.729.315l.261.09c.243.072.486.153.738.207l.27.054c.243.036.486.072.738.072h.27c.252-.036.504-.072.765-.126.261-.054.513-.126.783-.216l.27-.09c.27-.117.54-.243.81-.387.27-.18.54-.36.81-.486zm0 0"/></svg>
+                             <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>University of Cambridge</title><path d="M22.396 18.327c-.378-1.137-.84-2.22-1.386-3.249l-.162-.315c-.45-.873-.936-1.71-1.44-2.502-.513-.792-1.044-1.53-1.593-2.205-.54-.666-1.089-1.26-1.647-1.782-.558-.522-1.116-1.008-1.674-1.431l.243.207c.279.243.567.486.864.738.297.252.603.513.918.783l.18.153.36.324.18.153c.27.234.54.468.81.702.27.234.522.459.756.675l.09.081.27.252.27.261.27.27.09.09c.27.27.522.54.756.81l.09.09c.18.18.342.36.486.54l.09.108c.18.27.342.54.486.81.054.108.09.198.126.297l.072.198c.063.18.126.369.18.558l.054.18c.054.18.09.36.126.54l.036.162.036.18c.027.18.054.36.072.54l.018.144c0 .09 0 .18.018.27v.18c0 .09 0 .18.018.27 0 .09 0 .18 0 .27zm-11.43 1.341c.27.18.54.342.81.486.27.144.54.27.81.387l.27.09c.27.09.522.162.783.216.261.054.513.09.765.126h.27c.252 0 .495-.036.738-.072l.27-.054c.252-.054.495-.126.738-.207l.261-.09c.252-.09.495-.198.729-.315.234-.117.459-.243.675-.387l.09-.063c.18-.126.36-.261.522-.405.162-.144.315-.297.459-.459.144-.162.27-.333.387-.513.117-.18.216-.369.315-.567.09-.198.18-.405.252-.612l.063-.207c.054-.18.09-.369.126-.558.036-.189.063-.387.081-.585v-.288c0-.288-.036-.567-.09-.846-.054-.27-.126-.54-.216-.81l-.09-.27c-.09-.27-.198-.531-.315-.792l-.117-.261c-.117-.261-.243-.513-.378-.765-.135-.252-.279-.504-.432-.747-.153-.243-.315-.486-.486-.72-.18-.234-.36-.459-.54-.675-.18-.216-.369-.432-.558-.639-.189-.207-.387-.405-.585-.603-.198-.198-.405-.387-.612-.567-.207-.18-.423-.351-.639-.513l-.216-.162c-.225-.162-.45-.315-.675-.459-.225-.144-.45-.279-.684-.405-.234-.126-.468-.243-.702-.351l-1.026-1.116c-.279-.288-.567-.567-.864-.837-.297-.27-.603-.522-.918-.765l-.63-.486c-.315-.243-.639-.468-.972-.684-.333-.216-.675-.414-1.026-.594l-.36-.189c-.351-.18-.702-.342-1.062-.486l-.369-.144c-.36-.135-.729-.252-1.107-.351-.378-.099-.765-.18-1.161-.234L12 1.359l-.36.018c-.396.054-.783.135-1.161.234-.378.099-.747.216-1.107.351l-.369-.144c-.36.144-.711.306-1.062-.486l-.36.189c-.351.18-.693.378-1.026.594-.333-.216-.657.441-.972-.684l-.63.486c-.315.243-.621.495-.918.765-.297.27-.585.549-.864.837l-1.026 1.116c-.234.108-.468.225-.702.351-.234.126-.459.261-.684.405-.225.144-.45.297-.675.459l-.216.162c-.216.162-.423.333-.639-.513-.207.18-.414.369-.612-.567-.198.198-.387.396-.585.603-.189.207-.378.414-.558.639-.18.216-.36.441-.54.675-.18.234-.333.477-.486.72-.153.243-.3.495-.432.747-.135.252-.261.504-.378.765l-.117.261c-.117.27-.216.54-.315.792l-.09.27c-.09.27-.162.54-.216.81-.054.279-.09.558-.09.846v.288c0 .198.018.396.081.585.063.189.126.369.126.558l.063.207c.09.207.18.414.252.612.099.198.198.387.315.567.117.18.243.351.387.513.144.162.315.315.459.459.162.144.342.279.522.405l.09.063c.216.144.441.261.675.387.234.117.477.216.729.315l.261.09c.243.072.486.153.738.207l.27.054c.243.036.486.072.738.072h.27c.252-.036.504-.072.765-.126.261-.054.513-.126.783-.216l.27-.09c.27-.117.54-.243.81-.387.27-.18.54-.36.81-.486zm0 0"/></svg>
                         </div>
                         <div title="ETH Zurich" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
                              <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>ETH Zurich</title><path d="M21.258.012v9.31h-4.332v3.742h4.332v6.602h-4.332v4.322H.012V.012h21.246zM2.742 21.258h11.442v-4.322H2.742v4.322zm15.774-6.602v-3.74h-4.332V2.742H2.742v11.914h15.774zm-4.332-8.586v3.74H5.472v-3.74h8.712z"/></svg>
