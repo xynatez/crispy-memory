@@ -1,512 +1,611 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UI AIR Lab - Application Portal</title>
+    <title>UI AIR Lab: Advanced Interdisciplinary Research</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
+        /* Custom styles to complement Tailwind */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* A lighter, cooler gray */
-        }
-        .hero-bg {
-            background-color: #0d1a2e;
-            background-image: 
-                radial-gradient(at 20% 25%, hsla(212,60%,25%,0.3) 0px, transparent 50%),
-                radial-gradient(at 80% 75%, hsla(220,70%,30%,0.3) 0px, transparent 50%);
-        }
-        .step {
-            display: none;
-        }
-        .step.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        .form-section {
-            transition: all 0.3s ease-in-out;
-        }
-        [data-state="active"] {
-            color: #2563eb; /* blue-600 */
-            border-color: #2563eb; /* blue-600 */
-            font-weight: 600;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
         }
 
-        /* --- Animations --- */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
-            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.7); }
+        /* Gradient text effect */
+        .gradient-text {
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .animate-on-scroll {
+        /* Custom glassmorphism effect for cards */
+        .glass-card {
+            background: rgba(23, 23, 23, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #171717;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a4a4a;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5a5a5a;
+        }
+
+        /* Accordion styles */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        /* Fade-in animation on scroll */
+        .fade-in-section {
             opacity: 0;
-            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
 
-        .slide-up {
-            transform: translateY(50px);
-        }
-
-        .is-visible {
+        .fade-in-section.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
-        /* Custom file input */
-        .custom-file-input::-webkit-file-upload-button {
-            visibility: hidden;
-        }
-        .custom-file-input::before {
-            content: 'Select file';
-            display: inline-block;
-            background: #eef2ff; /* indigo-50 */
-            color: #3730a3; /* indigo-800 */
-            border-radius: 9999px;
-            padding: 0.5rem 1rem;
-            outline: none;
-            white-space: nowrap;
-            -webkit-user-select: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.875rem;
-            margin-right: 1rem;
-            transition: all 0.2s;
-        }
-        .custom-file-input:hover::before {
-             background: #e0e7ff; /* indigo-100 */
-        }
-        .file-name {
-            font-size: 0.875rem;
-            color: #4b5563; /* gray-600 */
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+
+        /* Canvas for particle animation */
+        #starfield-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
     </style>
 </head>
-<body class="text-gray-800">
+
+<body class="antialiased">
 
     <!-- Header & Navigation -->
-    <header id="header" class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-md">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-black text-gray-900 tracking-tighter">UI<span class="text-blue-600">.AIR</span></a>
-            <div class="hidden md:flex items-center space-x-8 font-medium">
-                <a href="#about" class="text-gray-600 hover:text-blue-600 transition-colors">About</a>
-                <a href="#criteria" class="text-gray-600 hover:text-blue-600 transition-colors">Criteria</a>
-                <a href="#benefits" class="text-gray-600 hover:text-blue-600 transition-colors">Benefits</a>
-                <a href="#apply" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow-lg transform hover:-translate-y-0.5">Apply Now</a>
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-white">UI<span class="text-blue-500">AIR</span> Lab</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                    <a href="#about" class="text-gray-300 hover:text-white transition">About</a>
+                    <a href="#criteria" class="text-gray-300 hover:text-white transition">Criteria</a>
+                    <a href="#problems" class="text-gray-300 hover:text-white transition">Research Areas</a>
+                    <a href="#benefits" class="text-gray-300 hover:text-white transition">Benefits</a>
+                    <a href="#portfolio" class="text-gray-300 hover:text-white transition">Portfolio</a>
+                    <a href="#apply" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Apply Now</a>
+                </div>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
             </div>
-            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md hover:bg-gray-100">
-                <i data-lucide="menu" class="h-6 w-6"></i>
-            </button>
         </nav>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-            <a href="#about" class="block py-2 text-gray-600 hover:text-blue-600">About</a>
-            <a href="#criteria" class="block py-2 text-gray-600 hover:text-blue-600">Criteria</a>
-            <a href="#benefits" class="block py-2 text-gray-600 hover:text-blue-600">Benefits</a>
-            <a href="#apply" class="block mt-2 bg-blue-600 text-white text-center px-4 py-2 rounded-md hover:bg-blue-700">Apply Now</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-black/90 backdrop-blur-sm">
+            <a href="#about" class="block text-gray-300 hover:text-white transition px-4 py-3">About</a>
+            <a href="#criteria" class="block text-gray-300 hover:text-white transition px-4 py-3">Criteria</a>
+            <a href="#problems" class="block text-gray-300 hover:text-white transition px-4 py-3">Research Areas</a>
+            <a href="#benefits" class="block text-gray-300 hover:text-white transition px-4 py-3">Benefits</a>
+            <a href="#portfolio" class="block text-gray-300 hover:text-white transition px-4 py-3">Portfolio</a>
+            <a href="#apply" class="block bg-blue-600 text-white px-4 py-3 mt-2 font-bold">Apply Now</a>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-bg text-white overflow-hidden">
-        <div class="container mx-auto px-6 py-28 text-center">
-            <h1 class="text-4xl md:text-6xl font-black leading-tight tracking-tighter animate-on-scroll slide-up">Call for the Uncommon Mind</h1>
-            <p class="mt-4 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto animate-on-scroll slide-up" style="transition-delay: 150ms;">This is not a call for students. This is a call for anomalies. For those who don't just learn knowledge—they build new ways of knowing.</p>
-            <div class="mt-10 animate-on-scroll slide-up" style="transition-delay: 300ms;">
-                <a href="#apply" class="bg-white text-blue-700 font-bold px-8 py-4 rounded-lg hover:bg-gray-200 transition-transform transform hover:scale-105 inline-block shadow-lg hover:shadow-2xl">
-                    Begin Your Application
-                </a>
-                <p class="mt-4 text-sm text-gray-400">Application Deadline: October 31, 2025</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="container mx-auto p-4 md:p-8">
-
-        <!-- About Section -->
-        <section id="about" class="py-20">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="bg-white p-8 rounded-xl shadow-lg animate-on-scroll slide-up">
-                     <h2 class="text-3xl font-bold text-gray-900 mb-4 tracking-tight">About the Lab</h2>
-                     <p class="text-gray-600 mb-4 leading-relaxed">A student-initiated research group at Universitas Indonesia, dedicated to addressing complex, real-world challenges through interdisciplinary inquiry, bridging science, technology, and society.</p>
-                     <p class="text-gray-600 leading-relaxed">The lab explores unsolved problems and develops human-centered solutions with academic rigor and global relevance.</p>
-                </div>
-                 <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-xl shadow-2xl p-8 text-center animate-on-scroll slide-up" style="transition-delay: 150ms;">
-                    <h3 class="text-2xl font-bold">Our Mission</h3>
-                    <p class="mt-3 text-xl italic font-light opacity-90">"To accelerate human civilization through interdisciplinary intelligence and systemic problem solving."</p>
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+             <canvas id="starfield-canvas"></canvas>
+            <div class="text-center px-4 z-10 relative">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter leading-tight">
+                    A Call for the <span class="gradient-text">Uncommon Mind</span>
+                </h1>
+                <p class="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-gray-300">
+                    This is not a call for students. This is a call for anomalies. For those who don't just learn knowledge—they build new ways of knowing.
+                </p>
+                <div class="mt-8 flex justify-center gap-4">
+                    <a href="#about" class="bg-white text-black font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition-transform hover:scale-105">
+                        Discover the Lab
+                    </a>
+                    <a href="#apply" class="border border-gray-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-gray-800 transition-transform hover:scale-105">
+                        Application Portal
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- "Why You'll Fit In" Section -->
-        <section class="py-20 animate-on-scroll slide-up">
-             <h2 class="text-3xl font-bold text-center mb-12 tracking-tight">Why You'll Fit In</h2>
-             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1">
-                    <i data-lucide="brain-circuit" class="w-10 h-10 text-blue-500 mb-4"></i>
-                    <h4 class="font-bold text-lg">You Think Differently</h4>
-                    <p class="text-gray-600 mt-2 text-sm">If you see patterns across disparate fields and feel constrained by traditional academic paths, you've found your tribe.</p>
+        <!-- About Section -->
+        <section id="about" class="py-20 sm:py-32 fade-in-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Advanced Interdisciplinary Research</h2>
+                    <p class="mt-4 text-lg text-gray-400">Bridging science, technology, and society to solve the world's most complex challenges.</p>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1">
-                    <i data-lucide="rocket" class="w-10 h-10 text-blue-500 mb-4"></i>
-                    <h4 class="font-bold text-lg">You're Ambitious</h4>
-                    <p class="text-gray-600 mt-2 text-sm">Ideas others call "too ambitious" are our starting point. We tackle global-scale challenges head-on.</p>
+                <div class="mt-16 grid md:grid-cols-2 gap-8 items-center">
+                    <div class="glass-card p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold text-white">About the Lab</h3>
+                        <p class="mt-4 text-gray-300">
+                            A student-initiated research group at Universitas Indonesia, dedicated to addressing complex, real-world challenges through interdisciplinary inquiry. The lab explores unsolved problems and develops human-centered solutions with academic rigor and global relevance.
+                        </p>
+                    </div>
+                    <div class="glass-card p-8 rounded-2xl">
+                        <h3 class="text-2xl font-bold text-white">The 2025 Membership Program</h3>
+                        <p class="mt-4 text-gray-300">
+                            A rare and rigorous program designed to bring together minds that think across boundaries. Open to exceptional high school students, undergraduates, master's students, and PhD candidates from any university worldwide. This is the one and only membership intake for 2025.
+                        </p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow transform hover:-translate-y-1">
-                    <i data-lucide="atom" class="w-10 h-10 text-blue-500 mb-4"></i>
-                    <h4 class="font-bold text-lg">You Build Things</h4>
-                    <p class="text-gray-600 mt-2 text-sm">This is more than a think tank. We build tools, frameworks, and real-world solutions, not just papers.</p>
-                </div>
+            </div>
+        </section>
+        
+        <!-- Mission Section -->
+        <section class="py-20 sm:py-32 bg-gray-900 fade-in-section">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                 <h2 class="text-lg font-semibold text-blue-400">Our Mission</h2>
+                <blockquote class="mt-4 text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+                    "To accelerate human civilization through interdisciplinary intelligence and systemic problem solving."
+                </blockquote>
             </div>
         </section>
 
         <!-- Membership Criteria Section -->
-        <section id="criteria" class="py-20">
-            <h2 class="text-3xl font-bold text-center mb-12 tracking-tight">Membership Criteria</h2>
-            <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Standard Path -->
-                <div class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-blue-500 animate-on-scroll slide-up">
-                    <div class="flex items-center mb-4">
-                        <i data-lucide="award" class="w-8 h-8 text-blue-500 mr-4"></i>
-                        <h3 class="text-2xl font-bold text-blue-800">Standard Path</h3>
-                    </div>
-                    <ul class="space-y-4 text-gray-600">
-                        <li class="flex items-start"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mr-3 mt-1 shrink-0"></i><span><strong>Official IQ Score ≥ 140</strong> from accepted assessments (Mensa, WAIS-IV, etc.).</span></li>
-                        <li class="flex items-start"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mr-3 mt-1 shrink-0"></i><span><strong>Mastery of 3+ academic disciplines</strong>, with one from the Core Six (Math, CS, Physics, Medicine, Psychology, Economics).</span></li>
-                        <li class="flex items-start"><i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 mr-3 mt-1 shrink-0"></i><span><strong>Demonstrable history of original thought</strong> (designing frameworks, independent research).</span></li>
-                    </ul>
+        <section id="criteria" class="py-20 sm:py-32 fade-in-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Membership Criteria</h2>
+                    <p class="mt-4 text-lg text-gray-400">We seek anomalies through two distinct pathways.</p>
                 </div>
-                <!-- Exceptional Path -->
-                <div class="bg-white rounded-xl shadow-lg p-8 border-t-4 border-green-500 animate-on-scroll slide-up" style="transition-delay: 150ms;">
-                    <div class="flex items-center mb-4">
-                         <i data-lucide="zap" class="w-8 h-8 text-green-500 mr-4"></i>
-                        <h3 class="text-2xl font-bold text-green-800">Exceptional Path</h3>
+                <div class="mt-16 grid lg:grid-cols-2 gap-8">
+                    <!-- Standard Path Card -->
+                    <div class="glass-card p-8 rounded-2xl border-2 border-blue-500/50 flex flex-col">
+                        <h3 class="text-2xl font-bold gradient-text">Standard Path</h3>
+                        <p class="mt-2 text-gray-400">For candidates who fulfill all three requirements.</p>
+                        <ul class="mt-6 space-y-4 text-gray-300 flex-grow">
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 text-blue-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                <span><strong>Official IQ Score > 140:</strong> Documented results from recognized assessments (Mensa, WAIS-IV, etc.).</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 text-blue-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                <span><strong>Mastery of 3+ Disciplines:</strong> At least one from the Core Six (Maths, CS, Physics, Medicine, Psychology, Econ). Evidence required.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg class="w-6 h-6 text-blue-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                                <span><strong>History of Original Thought:</strong> Demonstrable creation of frameworks, systems, or independent research.</span>
+                            </li>
+                        </ul>
+                        <div class="mt-6 pt-4 border-t border-gray-700">
+                           <p class="text-sm text-gray-400"><strong>Special Consideration:</strong> Candidates meeting 2 of 3 requirements are still encouraged to apply. We review applications holistically.</p>
+                        </div>
                     </div>
-                    <p class="mb-4 text-gray-600">Waives formal requirements if you have a history of profound impact.</p>
-                    <ul class="space-y-4 text-gray-600">
-                        <li class="flex items-start"><i data-lucide="sparkles" class="w-5 h-5 text-yellow-500 mr-3 mt-1 shrink-0"></i><span>Solved a revolutionary problem.</span></li>
-                        <li class="flex items-start"><i data-lucide="sparkles" class="w-5 h-5 text-yellow-500 mr-3 mt-1 shrink-0"></i><span>Created breakthrough solutions with real-world impact.</span></li>
-                    </ul>
+                    
+                    <!-- Exceptional Path Card -->
+                    <div class="glass-card p-8 rounded-2xl border-2 border-purple-500/50 flex flex-col">
+                         <h3 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">Exceptional Path</h3>
+                        <p class="mt-2 text-gray-400">For those who have redefined the boundaries of what's possible.</p>
+                        <div class="mt-6 text-gray-300 flex-grow flex items-center">
+                            <p class="text-lg">
+                                This path waives IQ and multi-domain requirements if you have:
+                                <br><br>
+                                Solved a revolutionary problem, made a measurable societal contribution through innovation, or created breakthrough solutions with real-world impact. Comprehensive evidence of achievement is required.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problems We Address Section -->
+        <section id="problems" class="py-20 sm:py-32 bg-gray-900 fade-in-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Problems We Address</h2>
+                    <p class="mt-4 text-lg text-gray-400">A selection of challenges we are exploring. We highly encourage proposing your own.</p>
+                </div>
+                <div id="problems-accordion-container" class="mt-16 max-w-4xl mx-auto space-y-4">
+                    <!-- Accordion items are dynamically injected by JavaScript -->
                 </div>
             </div>
         </section>
         
-        <!-- Benefits Section -->
-        <section id="benefits" class="py-20 animate-on-scroll slide-up">
-            <div class="bg-gray-900 text-white rounded-xl shadow-2xl overflow-hidden">
-                <div class="p-10">
-                    <h2 class="text-3xl font-bold text-center mb-12">Member Benefits</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10 max-w-7xl mx-auto">
-                        <div class="flex items-start"><i data-lucide="user-check" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Expert Mentorship</h4><p class="text-gray-300">Direct guidance from world-class researchers.</p></div></div>
-                        <div class="flex items-start"><i data-lucide="trending-up" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Academic Acceleration</h4><p class="text-gray-300">Fast-tracked visibility for elite graduate programs.</p></div></div>
-                        <div class="flex items-start"><i data-lucide="atom" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Research Opportunities</h4><p class="text-gray-300">Access to cutting-edge research projects.</p></div></div>
-                        <div class="flex items-start"><i data-lucide="file-text" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Publication Support</h4><p class="text-gray-300">Joint authorship on high-impact publications.</p></div></div>
-                        <div class="flex items-start"><i data-lucide="users" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Peer Network</h4><p class="text-gray-300">Collaborate with other exceptional minds.</p></div></div>
-                        <div class="flex items-start"><i data-lucide="git-merge" class="w-8 h-8 text-blue-400 mr-4 shrink-0"></i><div><h4 class="font-semibold text-lg">Cross-Level Learning</h4><p class="text-gray-300">Unique learning across all academic levels.</p></div></div>
+        <!-- Member Benefits Section -->
+        <section id="benefits" class="py-20 sm:py-32 fade-in-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">An Environment for Accelerated Growth</h2>
+                    <p class="mt-4 text-lg text-gray-400">We provide the resources, network, and platform for profound impact.</p>
+                </div>
+                <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Benefit Cards -->
+                    <div class="glass-card p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-white">Expert Mentorship</h3>
+                        <p class="mt-2 text-gray-400">Direct guidance from world-class researchers and thinkers.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-white">Academic Acceleration</h3>
+                        <p class="mt-2 text-gray-400">Fast-tracked visibility for elite M.S./Ph.D. programs at institutions like the Ivy League, MIT, Oxbridge, and more.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-white">World-Class Portfolio</h3>
+                        <p class="mt-2 text-gray-400">Build a body of work—publications, projects, and frameworks—that stands out globally.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-white">High-Impact Publications</h3>
+                        <p class="mt-2 text-gray-400">Joint authorship opportunities on high-impact scientific publications.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-white">Anomalous Peer Network</h3>
+                        <p class="mt-2 text-gray-400">Collaborate with exceptional minds who challenge, support, and build with you.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <h3 class="text-xl font-bold text-white">Cross-Level Learning</h3>
+                        <p class="mt-2 text-gray-400">Unique exchange between high school, undergraduate, and graduate students.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Application Form Section -->
-        <section id="apply" class="py-20 animate-on-scroll slide-up">
-            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold mb-2 text-center tracking-tight">Application Form</h2>
-                <p class="text-center text-gray-500 mb-8">We don't care about your GPA—we care about your thinking.</p>
-                
-                <div class="border-b border-gray-200 mb-8">
-                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                        <button id="step-btn-1" data-state="active" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Step 1: Personal</button>
-                        <button id="step-btn-2" data-state="inactive" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">Step 2: Details</button>
-                        <button id="step-btn-3" data-state="inactive" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700">Step 3: Statement</button>
-                    </nav>
+        <!-- Portfolio for Excellence Section -->
+        <section id="portfolio" class="py-20 sm:py-32 bg-gray-900 fade-in-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">A Portfolio for Global Excellence</h2>
+                    <p class="mt-4 text-lg max-w-3xl mx-auto text-gray-400">Our members produce research and publications suitable for applications to the world's most selective universities.</p>
                 </div>
-                
-                <form id="multiStepForm" class="space-y-6">
-                    <!-- Step 1: Personal Information -->
-                    <div id="step-1" class="step active">
-                        <fieldset class="space-y-4">
-                            <legend class="text-xl font-semibold mb-4 text-gray-800">Personal Information</legend>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
-                                    <input type="text" id="fullName" name="fullName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                </div>
-                                <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                                    <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                </div>
-                                <div>
-                                    <label for="university" class="block text-sm font-medium text-gray-700">University / High School</label>
-                                    <input type="text" id="university" name="university" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                </div>
-                                <div>
-                                    <label for="academicLevel" class="block text-sm font-medium text-gray-700">Current Academic Level</label>
-                                    <select id="academicLevel" name="academicLevel" required class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="">Select Level</option>
-                                        <option value="high_school">High School Student</option>
-                                        <option value="undergraduate">Undergraduate Student</option>
-                                        <option value="master">Master's Student</option>
-                                        <option value="phd">PhD Candidate</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-
-                    <!-- Step 2: Application Details -->
-                    <div id="step-2" class="step">
-                        <fieldset>
-                             <legend class="text-xl font-semibold mb-4 text-gray-800">Application Details</legend>
-                             <div class="mb-6">
-                                 <label class="block text-sm font-medium text-gray-700 mb-2">Application Path</label>
-                                 <div class="flex gap-4">
-                                     <label for="standardPath" class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer flex-1 has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500 transition-all"><input id="standardPath" name="applicationPath" type="radio" value="standard" required class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 mr-3">Standard Path</label>
-                                     <label for="exceptionalPath" class="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer flex-1 has-[:checked]:bg-green-50 has-[:checked]:border-green-500 transition-all"><input id="exceptionalPath" name="applicationPath" type="radio" value="exceptional" class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 mr-3">Exceptional Path</label>
-                                 </div>
-                             </div>
-                             <div id="iqScoreSection" class="form-section hidden mb-6">
-                                 <label for="iqScore" class="block text-sm font-medium text-gray-700">Official IQ Score</label>
-                                 <input type="number" id="iqScore" name="iqScore" placeholder="e.g., 145" class="mt-1 block w-full md:w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                             </div>
-                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Document Upload</label>
-                                <div class="space-y-4">
-                                    <div>
-                                        <label for="portfolio" class="block text-xs font-medium text-gray-600">Portfolio & Proof of Work (Required)</label>
-                                        <div class="flex items-center mt-1"><input type="file" id="portfolio" name="portfolio" required class="custom-file-input"><span class="file-name">No file selected</span></div>
-                                    </div>
-                                    <div id="iqProofSection" class="form-section hidden">
-                                        <label for="iqProof" class="block text-xs font-medium text-gray-600">Proof of IQ Score (Required for Standard Path)</label>
-                                        <div class="flex items-center mt-1"><input type="file" id="iqProof" name="iqProof" class="custom-file-input"><span class="file-name">No file selected</span></div>
-                                    </div>
-                                    <div>
-                                        <label for="recommendation" class="block text-xs font-medium text-gray-600">Letters of Recommendation (Optional)</label>
-                                        <div class="flex items-center mt-1"><input type="file" id="recommendation" name="recommendation" class="custom-file-input"><span class="file-name">No file selected</span></div>
-                                    </div>
-                                </div>
-                             </div>
-                        </fieldset>
-                    </div>
-                    
-                    <!-- Step 3: Personal Statement -->
-                    <div id="step-3" class="step">
-                        <fieldset>
-                            <legend class="text-xl font-semibold mb-4 text-gray-800">Personal Statement</legend>
-                            <div>
-                                <label for="statement" class="block text-sm font-medium text-gray-700">Explain your interdisciplinary approach and why you are a fit for the UI AIR Lab.</label>
-                                <textarea id="statement" name="statement" rows="8" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
-                            </div>
-                        </fieldset>
-                    </div>
-
-                    <div class="flex justify-between items-center pt-6">
-                        <button type="button" id="prevBtn" class="bg-gray-200 text-gray-800 font-semibold px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
-                        <div>
-                            <button type="button" id="nextBtn" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm hover:shadow-md transform hover:-translate-y-0.5">Next</button>
-                            <button type="submit" id="submitBtn" class="hidden bg-green-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-sm hover:shadow-md transform hover:-translate-y-0.5">Submit Application</button>
+                <div class="mt-16">
+                    <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-6 md:gap-x-12">
+                        <!-- University Logos -->
+                        <div title="MIT" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                             <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>MIT</title><path d="M3.52 17.373h2.112v-3.32h.048c.232.736.56 1.344.984 1.824s.92.864 1.488 1.152.98.432 1.44.432c.576 0 1.028-.12 1.356-.36s.524-.6.524-1.08v-5.088h2.112v5.136c0 .936-.26 1.688-.78 2.256s-1.216.852-2.088.852c-.624 0-1.164-.168-1.62-.504s-.84-.816-1.128-1.44h-.048v1.8h-2.112v-8.88h2.112v3.312h.048c.24-.744.572-1.356.996-1.836s.924-.864 1.49-.152.98-.432 1.44-.432c.576 0 1.028-.12 1.356-.36s.524-.6.524-1.08v-5.088h2.112v5.136c0 .936-.26 1.688-.78 2.256s-1.216.852-2.088.852c-.624 0-1.164-.168-1.62-.504s-.84-.816-1.128-1.44h-.048v1.8h-2.112v-8.88zm8.688 0h2.112v-8.88h-2.112v8.88zm5.688-8.88v8.88h2.112v-6.768h.048l2.256 6.768h2.352l2.256-6.768h.048v6.768h2.112v-8.88h-3.528l-2.208 6.576h-.048L19.16 8.493z"/></svg>
+                        </div>
+                        <div title="Harvard University" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>Harvard University</title><path d="M24 8.241v7.518c0 .247-.043.402-.128.468s-.213.1-.384.1H.512c-.17 0-.3-.034-.384-.1S0 16.006 0 15.759V8.241c0-.248.043-.403.128-.468s.214-.1.384-.1h23c.17 0 .3.034.384.1s.128.22.128.468zm-8.24 6.275h-1.63V9.74h1.63zm-3.263 0h-1.63V9.74h1.63zm-3.261 0h-1.63V9.74h1.63zm-3.262 0H3.26V9.74h1.63zm13.048 0h-1.63V9.74h1.63zM1.025 8.754v6.002h.63v-6.002zm21.32 0v6.002h.63v-6.002zM12 7.028a.512.512 0 0 1-.384-.17L1.388 1.452a.513.513 0 0 1 0-.728L1.92.192a.512.512 0 0 1 .728 0L12 8.44l9.352-8.248a.513.513 0 0 1 .728 0l.532.532a.512.512 0 0 1 0 .728L12.384 6.858a.512.512 0 0 1-.384.17z"/></svg>
+                        </div>
+                         <div title="University of Oxford" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                             <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>University of Oxford</title><path d="M12.001 0C8.204 0 5.122 3.081 5.122 6.878c0 .32.023.633.066.942l.011.083H5.12c-1.39 0-2.517 1.127-2.517 2.517v4.16c0 1.39 1.127 2.518 2.518 2.518h.078l.01-.082c.045.31.067.623.067.943C5.26 20.92 8.342 24 12.14 24c3.796 0 6.877-3.08 6.877-6.877 0-.32-.023-.633-.066-.943l-.011-.082h.078c1.39 0 2.518-1.128 2.518-2.518v-4.16c0-1.39-1.128-2.517-2.518-2.517h-.078l-.01.083c-.045-.31-.067-.623-.067-.943C18.878 3.08 15.797 0 12.001 0zm-.001 2.373c2.49 0 4.504 2.015 4.504 4.505s-2.015 4.505-4.504 4.505-4.505-2.015-4.505-4.505S9.51 2.373 12 2.373zm-6.606 7.02h.384v5.214h-.384zm13.212 0h-.384v5.214h.384zM12.001 12.74c2.49 0 4.504 2.014 4.504 4.504s-2.015 4.505-4.504 4.505-4.505-2.015-4.505-4.505 2.015-4.504 4.505-4.504z"/></svg>
+                        </div>
+                        <div title="University of Cambridge" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                             <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>University of Cambridge</title><path d="M22.396 18.327c-.378-1.137-.84-2.22-1.386-3.249l-.162-.315c-.45-.873-.936-1.71-1.44-2.502-.513-.792-1.044-1.53-1.593-2.205-.54-.666-1.089-1.26-1.647-1.782-.558-.522-1.116-1.008-1.674-1.431l.243.207c.279.243.567.486.864.738.297.252.603.513.918.783l.18.153.36.324.18.153c.27.234.54.468.81.702.27.234.522.459.756.675l.09.081.27.252.27.261.27.27.09.09c.27.27.522.54.756.81l.09.09c.18.18.342.36.486.54l.09.108c.18.27.342.54.486.81.054.108.09.198.126.297l.072.198c.063.18.126.369.18.558l.054.18c.054.18.09.36.126.54l.036.162.036.18c.027.18.054.36.072.54l.018.144c0 .09 0 .18.018.27v.18c0 .09 0 .18.018.27 0 .09 0 .18 0 .27zm-11.43 1.341c.27.18.54.342.81.486.27.144.54.27.81.387l.27.09c.27.09.522.162.783.216.261.054.513.09.765.126h.27c.252 0 .495-.036.738-.072l.27-.054c.252-.054.495-.126.738-.207l.261-.09c.252-.09.495-.198.729-.315.234-.117.459-.243.675-.387l.09-.063c.18-.126.36-.261.522-.405.162-.144.315-.297.459-.459.144-.162.27-.333.387-.513.117-.18.216-.369.315-.567.09-.198.18-.405.252-.612l.063-.207c.054-.18.09-.369.126-.558.036-.189.063-.387.081-.585v-.288c0-.288-.036-.567-.09-.846-.054-.27-.126-.54-.216-.81l-.09-.27c-.09-.27-.198-.531-.315-.792l-.117-.261c-.117-.261-.243-.513-.378-.765-.135-.252-.279-.504-.432-.747-.153-.243-.315-.486-.486-.72-.18-.234-.36-.459-.54-.675-.18-.216-.369-.432-.558-.639-.189-.207-.387-.405-.585-.603-.198-.198-.405-.387-.612-.567-.207-.18-.423-.351-.639-.513l-.216-.162c-.225-.162-.45-.315-.675-.459-.225-.144-.45-.279-.684-.405-.234-.126-.468-.243-.702-.351l-1.026-1.116c-.279-.288-.567-.567-.864-.837-.297-.27-.603-.522-.918-.765l-.63-.486c-.315-.243-.639-.468-.972-.684-.333-.216-.675-.414-1.026-.594l-.36-.189c-.351-.18-.702-.342-1.062-.486l-.369-.144c-.36-.135-.729-.252-1.107-.351-.378-.099-.765-.18-1.161-.234L12 1.359l-.36.018c-.396.054-.783.135-1.161.234-.378.099-.747.216-1.107.351l-.369.144c-.36.144-.711.306-1.062.486l-.36.189c-.351.18-.693.378-1.026.594-.333.216-.657.441-.972.684l-.63.486c-.315.243-.621.495-.918.765-.297.27-.585.549-.864.837l-1.026 1.116c-.234.108-.468.225-.702.351-.234.126-.459.261-.684.405-.225.144-.45.297-.675.459l-.216.162c-.216.162-.423.333-.639.513-.207.18-.414.369-.612.567-.198.198-.387.396-.585.603-.189.207-.378.414-.558.639-.18.216-.36.441-.54.675-.18.234-.333.477-.486.72-.153.243-.3.495-.432.747-.135.252-.261.504-.378.765l-.117.261c-.117.27-.216.54-.315.792l-.09.27c-.09.27-.162.54-.216.81-.054.279-.09.558-.09.846v.288c0 .198.018.396.081.585.063.189.126.369.126.558l.063.207c.09.207.18.414.252.612.099.198.198.387.315.567.117.18.243.351.387.513.144.162.315.315.459.459.162.144.342.279.522.405l.09.063c.216.144.441.261.675.387.234.117.477.216.729.315l.261.09c.243.072.486.153.738.207l.27.054c.243.036.486.072.738.072h.27c.252-.036.504-.072.765-.126.261-.054.513-.126.783-.216l.27-.09c.27-.117.54-.243.81-.387.27-.18.54-.36.81-.486zm0 0"/></svg>
+                        </div>
+                        <div title="ETH Zurich" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                             <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>ETH Zurich</title><path d="M21.258.012v9.31h-4.332v3.742h4.332v6.602h-4.332v4.322H.012V.012h21.246zM2.742 21.258h11.442v-4.322H2.742v4.322zm15.774-6.602v-3.74h-4.332V2.742H2.742v11.914h15.774zm-4.332-8.586v3.74H5.472v-3.74h8.712z"/></svg>
+                        </div>
+                        <div title="National University of Singapore" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                           <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>National University of Singapore</title><path d="M22.909.002H1.09A1.09 1.09 0 0 0 0 1.093v21.815A1.09 1.09 0 0 0 1.09 24h21.82a1.09 1.09 0 0 0 1.09-1.092V1.093A1.09 1.09 0 0 0 22.908.002zM7.34 16.96h2.182v-3.72h3.272v3.72h2.182V7.04h-2.182v3.46h-3.272V7.04H7.34v9.92zM2.18 21.817V2.183h2.183v19.634H2.18zm17.457 0H5.454V19.63h14.183v2.187z"/></svg>
                         </div>
                     </div>
-                </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Is This For You? Section -->
+        <section class="py-20 sm:py-32 bg-gray-900 fade-in-section">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-white">Is This For You?</h2>
+                </div>
+                <div class="mt-12 flow-root">
+                    <div class="-my-8 divide-y divide-gray-700">
+                        <!-- Table-like rows -->
+                        <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-4">
+                            <p class="font-semibold text-white">If you think faster than your teachers...</p>
+                            <p class="text-gray-400 md:text-right">...then you're not alone here.</p>
+                        </div>
+                        <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-4">
+                            <p class="font-semibold text-white">If you feel out of place in academic routines...</p>
+                            <p class="text-gray-400 md:text-right">...then this is your new rhythm.</p>
+                        </div>
+                         <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-4">
+                            <p class="font-semibold text-white">If you see patterns across math, medicine, and society...</p>
+                            <p class="text-gray-400 md:text-right">...then here, that's the starting point.</p>
+                        </div>
+                         <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-4">
+                            <p class="font-semibold text-white">If you build ideas that others call "too ambitious"...</p>
+                            <p class="text-gray-400 md:text-right">...then we call them "essential".</p>
+                        </div>
+                         <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-4">
+                            <p class="font-semibold text-white">If you want to work with minds at all academic levels...</p>
+                            <p class="text-gray-400 md:text-right">...then cross-pollination of ideas awaits.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Apply Section -->
+        <section id="apply" class="py-20 sm:py-32 fade-in-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="glass-card rounded-2xl p-8 md:p-12 lg:p-16 text-center border-2 border-blue-500/50">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Submit Your Application</h2>
+                    <p class="mt-4 text-lg text-gray-400">We don't care about your GPA — we care about your thinking.</p>
+                    
+                    <div class="mt-8 text-left max-w-2xl mx-auto">
+                        <p class="text-2xl font-bold text-center text-red-400">Deadline: October 31, 2025</p>
+                        <p class="text-sm text-center text-gray-400">(Rolling review process - expect a response within 5 days maximum)</p>
+                        
+                        <h4 class="font-semibold text-white mt-8 mb-4">Required Documents:</h4>
+                        <ul class="space-y-2 text-gray-300 list-disc list-inside">
+                            <li>Detailed application form</li>
+                            <li>Official IQ test results (for Standard Path)</li>
+                            <li>Portfolio of work (papers, research, publications, projects)</li>
+                            <li>Personal statement explaining your interdisciplinary approach</li>
+                            <li>Letters of recommendation (optional but encouraged)</li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-10">
+                        <a href="#" class="inline-block bg-blue-600 text-white font-bold text-lg px-10 py-4 rounded-lg hover:bg-blue-700 transition-transform hover:scale-105">
+                            Submit Your Application Online
+                        </a>
+                        <p class="text-xs text-gray-500 mt-2">(Detailed application portal link will be provided)</p>
+                    </div>
+
+                     <p class="mt-8 text-gray-400">Only a select few will be accepted. But if you're the right kind of mind — one is enough.</p>
+                </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white mt-12">
-        <div class="container mx-auto p-10 text-center">
-            <a href="#" class="text-2xl font-black text-white tracking-tighter">UI<span class="text-blue-400">.AIR</span></a>
-            <p class="mt-4 text-gray-400">&copy; 2025 UI AIR Lab - Universitas Indonesia</p>
-            <p class="mt-2 text-sm text-gray-500">
-                Questions? Contact us at <a href="mailto:airlab@ui.ac.id" class="underline hover:text-blue-300">airlab@ui.ac.id</a>
+    <footer class="bg-gray-900 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+            <h3 class="text-2xl font-bold text-white">Questions?</h3>
+            <p class="mt-4 text-gray-400">
+                Contact us at: <a href="mailto:airlab@ui.ac.id" class="text-blue-400 hover:underline">airlab@ui.ac.id</a>
+                <br>
+                Visit: <a href="http://www.ui.ac.id/airlab" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">www.ui.ac.id/airlab</a>
             </p>
+            <p class="mt-8 text-sm text-gray-500">&copy; 2025 UI AIR Lab. All Rights Reserved.</p>
         </div>
     </footer>
-    
-    <!-- Success Modal -->
-    <div id="successModal" class="hidden fixed z-50 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-900 bg-opacity-60 transition-opacity" aria-hidden="true"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
-                           <i data-lucide="check" class="h-6 w-6 text-green-600"></i>
-                        </div>
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Application Submitted!</h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-500">
-                                    Thank you for applying to the UI AIR Lab. Your application is under review. We will respond within a maximum of 5 days.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="button" id="closeModal" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <script>
-        lucide.createIcons();
+        // JavaScript for website functionality
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- Animation on Scroll ---
-            const observer = new IntersectionObserver((entries) => {
+        // --- Starfield Animation for Hero Section ---
+        const canvas = document.getElementById('starfield-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            
+            let stars;
+            const numStars = 200;
+            const maxStarSize = 2.5;
+            const minStarSize = 0.5;
+
+            function setCanvasSize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            class Star {
+                constructor(x, y, size, speed) {
+                    this.x = x;
+                    this.y = y;
+                    this.size = size;
+                    this.speed = speed;
+                    this.opacity = Math.random() * 0.5 + 0.5;
+                    this.opacityDirection = 1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    ctx.fill();
+                }
+
+                update() {
+                    this.y += this.speed;
+                    if (this.y > canvas.height + this.size) {
+                        this.y = -this.size;
+                        this.x = Math.random() * canvas.width;
+                    }
+                    if (this.opacityDirection === 1) {
+                        if (this.opacity < 1) { this.opacity += 0.005; } else { this.opacityDirection = -1; }
+                    } else {
+                        if (this.opacity > 0.1) { this.opacity -= 0.005; } else { this.opacityDirection = 1; }
+                    }
+                    this.draw();
+                }
+            }
+
+            function initStars() {
+                setCanvasSize();
+                stars = [];
+                for (let i = 0; i < numStars; i++) {
+                    const size = Math.random() * (maxStarSize - minStarSize) + minStarSize;
+                    const speed = size / 2 * 0.15;
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    stars.push(new Star(x, y, size, speed));
+                }
+            }
+
+            function animateStars() {
+                requestAnimationFrame(animateStars);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (stars) {
+                    stars.forEach(star => star.update());
+                }
+            }
+
+            window.addEventListener('resize', initStars);
+            initStars();
+            animateStars();
+        }
+
+        // --- Other Functionality ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if(mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+                const mobileNavLinks = mobileMenu.querySelectorAll('a');
+                mobileNavLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            // 2. Sticky Header Background on Scroll
+            const header = document.getElementById('header');
+            if(header) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) {
+                        header.classList.add('bg-black/70', 'backdrop-blur-sm');
+                    } else {
+                        header.classList.remove('bg-black/70', 'backdrop-blur-sm');
+                    }
+                });
+            }
+
+            // 3. Data and Logic for "Problems We Address" Accordion
+            const problemsData = [
+                {
+                    title: "I. Fundamental Mathematical & Theoretical Problems",
+                    items: ["P vs NP Problem", "Hodge Conjecture", "Riemann Hypothesis", "Navier-Stokes Existence and Smoothness", "Yang-Mills Existence and Mass Gap", "Birch and Swinnerton-Dyer Conjecture", "Poincaré Conjecture Generalizations", "Collatz Conjecture", "Goldbach Conjecture", "Twin Prime Conjecture", "Continuum Hypothesis", "Incompleteness Navigation Framework"]
+                },
+                {
+                    title: "II. Development of New Mathematical Tools",
+                    items: ["Complexity Calculus (UI AIR Original)", "Mental Model Algebra", "Framework for Non-Symbolic Mathematics", "Structural Memory Mapping Language", "Polyspace Geometry", "Entropic Algebraic Systems", "Semantic Topology of Learning", "Meta-Language of Mathematical Growth"]
+                },
+                {
+                    title: "III. AI, Logic & Computation",
+                    items: ["AI Alignment Theory under Gödel Constraints", "Universal Inductive Bias Model", "Autonomous Formal Theorem Prover", "Logic-Epistemic Model of Conscious Machines", "Simulation-Based AGI Self-Alignment", "Self-Evolving AI with Safe Complexity Bounds"]
+                },
+                {
+                    title: "IV. Cryptography & Post-Quantum Systems",
+                    items: ["Fully Human-Designed Quantum-Resistant Protocols", "Decentralized Identity Infrastructure (Geo-Based)", "Framework for Entanglement-Key Encryption", "Semiotic-Aware Blockchain Protocol", "Encrypted AI Thought Logging", "Private Multi-Layer Human-AI Conversations"]
+                },
+                {
+                    title: "V. Biological, Bioinformatic & Genetic Systems",
+                    items: ["Full AI-Driven Protein Folding + Molecular Docking", "Systems Biology of Medicinal Plants (Indonesia-first Project)", "Real-Time Disease Pathway Simulator", "Unified Genome-Epigenome-Proteome Integration Engine", "Human Mutation Trajectory Forecast Model", "AI-Based Vaccine Architecture Prediction"]
+                },
+                {
+                    title: "VI. Global Civilization, Ethics & Crisis Simulation",
+                    items: ["Global Societal Collapse Simulator", "Ethics-Aware AGI Prototype", "Reconstructive Economic Logic for Post-Capitalist Society", "Framework for Inter-Civilizational Cooperation AI", "Predictive Engine for Civil Unrest and Instability"]
+                },
+                {
+                    title: "VII. Education, Cognition & Mental Modeling",
+                    items: ["Mental Model-Driven Curriculum Generator", "Personal Learning Entropy Mapper", "Neurosemantic AI that Learns How You Think", "High-Speed Abstract Comprehension Engine", "GPT-Aligned Gifted Education Platform", "Dynamic Self-Organizing Study OS"]
+                },
+                {
+                    title: "VIII. Interdisciplinary Knowledge Systems & Language",
+                    items: ["Cross-Domain Concept Mapping Engine", "Universal Language Translator for Concepts (not words)", "Framework for Causal Knowledge Transfer", "Systematic Human Intuition Extractor", "Self-Adaptive Idea Compression System"]
+                },
+                {
+                    title: "IX. Meta-Research, Methodology & Infrastructure",
+                    items: ["Autonomous Hypothesis Generator", "Proof Reconstruction AI from Empirical Data", "AGI-Level Research Assistant Framework", "Preprint Credibility AI Filter", "Modular Science Engine for Developing Nations", "Framework for Post-Academic Science Infrastructure"]
+                }
+            ];
+
+            const accordionContainer = document.getElementById('problems-accordion-container');
+            if (accordionContainer) {
+                accordionContainer.innerHTML = ''; // Clear just in case
+                problemsData.forEach((category) => {
+                    const accordionItem = document.createElement('div');
+                    accordionItem.className = 'glass-card rounded-xl overflow-hidden';
+
+                    const button = document.createElement('button');
+                    button.className = 'w-full text-left p-5 flex justify-between items-center font-bold text-white hover:bg-gray-800/50 transition';
+                    button.innerHTML = `
+                        <span class="pr-4">${category.title}</span>
+                        <svg class="w-6 h-6 transform transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    `;
+                    
+                    const content = document.createElement('div');
+                    content.className = 'accordion-content';
+                    const innerContent = document.createElement('div');
+                    innerContent.className = 'p-5 border-t border-gray-700';
+                    const list = document.createElement('ul');
+                    list.className = 'grid sm:grid-cols-2 gap-x-8 gap-y-2 text-gray-400 list-disc list-inside';
+                    category.items.forEach(itemText => {
+                        const li = document.createElement('li');
+                        li.textContent = itemText;
+                        list.appendChild(li);
+                    });
+                    innerContent.appendChild(list);
+                    content.appendChild(innerContent);
+                    accordionItem.appendChild(button);
+                    accordionItem.appendChild(content);
+                    accordionContainer.appendChild(accordionItem);
+
+                    button.addEventListener('click', () => {
+                        const icon = button.querySelector('svg');
+                        const isOpening = !content.style.maxHeight;
+
+                        document.querySelectorAll('#problems-accordion-container .accordion-content').forEach(acc => {
+                            if (acc !== content) {
+                                acc.style.maxHeight = null;
+                                acc.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
+                            }
+                        });
+
+                        if (isOpening) {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                            icon.classList.add('rotate-180');
+                        } else {
+                            content.style.maxHeight = null;
+                            icon.classList.remove('rotate-180');
+                        }
+                    });
+                });
+            }
+
+            // 4. Fade-in on Scroll Animation
+            const sections = document.querySelectorAll('.fade-in-section');
+            const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.animate-on-scroll').forEach(el => {
-                observer.observe(el);
+            }, {
+                rootMargin: '0px',
+                threshold: 0.1
             });
 
-            // --- Mobile Menu ---
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-            
-            // --- Multi-step Form ---
-            const steps = Array.from(document.querySelectorAll('.step'));
-            const stepButtons = Array.from(document.querySelectorAll('nav[aria-label="Tabs"] button'));
-            const nextBtn = document.getElementById('nextBtn');
-            const prevBtn = document.getElementById('prevBtn');
-            const submitBtn = document.getElementById('submitBtn');
-            const form = document.getElementById('multiStepForm');
-            let currentStep = 0;
-
-            function updateButtons() {
-                prevBtn.disabled = currentStep === 0;
-                if (currentStep === steps.length - 1) {
-                    nextBtn.classList.add('hidden');
-                    submitBtn.classList.remove('hidden');
-                } else {
-                    nextBtn.classList.remove('hidden');
-                    submitBtn.classList.add('hidden');
-                }
-            }
-
-            function showStep(stepIndex) {
-                steps.forEach((step, index) => {
-                    step.classList.toggle('active', index === stepIndex);
-                });
-                stepButtons.forEach((btn, index) => {
-                    btn.setAttribute('data-state', index === stepIndex ? 'active' : 'inactive');
-                });
-                currentStep = stepIndex;
-                updateButtons();
-            }
-            
-            function validateStep(stepIndex) {
-                const currentStepElement = steps[stepIndex];
-                if (!currentStepElement) return false;
-                
-                const currentStepInputs = currentStepElement.querySelectorAll('[required]');
-                let isValid = true;
-                currentStepInputs.forEach(input => {
-                    if (!input.reportValidity()) {
-                        isValid = false;
-                    }
-                });
-                return isValid;
-            }
-
-            nextBtn.addEventListener('click', () => {
-                if (validateStep(currentStep) && currentStep < steps.length - 1) {
-                    showStep(currentStep + 1);
-                }
-            });
-
-            prevBtn.addEventListener('click', () => {
-                if (currentStep > 0) {
-                    showStep(currentStep - 1);
-                }
-            });
-
-            showStep(0);
-
-            // --- Conditional Fields for Application Path ---
-            const standardPathRadio = document.getElementById('standardPath');
-            const exceptionalPathRadio = document.getElementById('exceptionalPath');
-            const iqScoreSection = document.getElementById('iqScoreSection');
-            const iqProofSection = document.getElementById('iqProofSection');
-            const iqScoreInput = document.getElementById('iqScore');
-            const iqProofInput = document.getElementById('iqProof');
-
-            function handlePathChange() {
-                if (standardPathRadio.checked) {
-                    iqScoreSection.classList.remove('hidden');
-                    iqProofSection.classList.remove('hidden');
-                    iqScoreInput.required = true;
-                    iqProofInput.required = true;
-                } else {
-                    iqScoreSection.classList.add('hidden');
-                    iqProofSection.classList.add('hidden');
-                    iqScoreInput.required = false;
-                    iqProofInput.required = false;
-                }
-            }
-            standardPathRadio.addEventListener('change', handlePathChange);
-            exceptionalPathRadio.addEventListener('change', handlePathChange);
-            
-            // --- Custom File Input Labels ---
-            document.querySelectorAll('.custom-file-input').forEach(input => {
-                input.addEventListener('change', (e) => {
-                    const fileName = e.target.files[0] ? e.target.files[0].name : 'No file selected';
-                    const fileNameSpan = e.target.nextElementSibling;
-                    if(fileNameSpan && fileNameSpan.classList.contains('file-name')) {
-                        fileNameSpan.textContent = fileName;
-                    }
-                });
-            });
-
-            // --- Modal Logic ---
-            const modal = document.getElementById('successModal');
-            const closeModalButton = document.getElementById('closeModal');
-
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                if (validateStep(currentStep)) {
-                    modal.classList.remove('hidden');
-                    lucide.createIcons(); // Rerender icons in modal
-                }
-            });
-
-            closeModalButton.addEventListener('click', function() {
-                modal.classList.add('hidden');
-                form.reset();
-                showStep(0);
-                handlePathChange();
-                // Reset file input labels
-                document.querySelectorAll('.file-name').forEach(span => span.textContent = 'No file selected');
+            sections.forEach(section => {
+                observer.observe(section);
             });
         });
+
     </script>
+
 </body>
+
 </html>
