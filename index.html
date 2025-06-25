@@ -10,62 +10,98 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <style>
-        /* Custom styles to complement Tailwind */
+        /* ========================================
+        CUSTOM STYLES FOR UI AIR LAB WEBSITE
+        ========================================
+        This stylesheet complements Tailwind CSS with advanced effects 
+        like aurora glass cards, dynamic backgrounds, and custom scrollbars.
+        */
+
+        :root {
+            --bg-color: #0A0A0A;
+            --primary-text: #E5E7EB; /* Slightly softer than pure white */
+            --secondary-text: #9CA3AF;
+            --accent-glow-start: #3b82f6;
+            --accent-glow-end: #8b5cf6;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(59, 130, 246, 0.5);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
-            color: #e5e5e5;
+            background-color: var(--bg-color);
+            color: var(--primary-text);
         }
 
         /* Gradient text effect */
         .gradient-text {
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            background: linear-gradient(90deg, var(--accent-glow-start), var(--accent-glow-end));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* Custom glassmorphism effect for cards */
+        /* Aurora Glass Card Effect: 
+        A refined glassmorphism with a subtle border glow on hover.
+        */
         .glass-card {
-            background: rgba(23, 23, 23, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            background: rgba(23, 23, 23, 0.5); /* Slightly less opaque */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother transition */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .glass-card:hover:before {
+            opacity: 1;
         }
 
         .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--border-hover);
         }
         
-        /* Scrollbar styling */
+        /* Custom scrollbar for a cohesive look */
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #171717;
+            background: #111;
         }
         ::-webkit-scrollbar-thumb {
-            background: #4a4a4a;
+            background: #373737;
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #5a5a5a;
+            background: #4a4a4a;
         }
 
         /* Accordion styles */
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease-out;
+            transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Fade-in animation on scroll */
         .fade-in-section {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(40px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
         }
 
         .fade-in-section.is-visible {
@@ -73,8 +109,8 @@
             transform: translateY(0);
         }
 
-        /* Canvas for particle animation */
-        #starfield-canvas {
+        /* Canvas for hero background animation */
+        #hero-canvas {
             position: absolute;
             top: 0;
             left: 0;
@@ -82,25 +118,39 @@
             height: 100%;
             z-index: 1;
         }
+        
+        /* Animated background for the hero section */
+        .hero-bg-animated {
+            background: linear-gradient(-45deg, #0a0a0a, #0d1a3a, #0a0a0a, #2a0d3a);
+            background-size: 400% 400%;
+            animation: gradientBG 25s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
     </style>
 </head>
 
 <body class="antialiased">
 
     <!-- Header & Navigation -->
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <span class="text-2xl font-bold text-white">UI<span class="text-blue-500">AIR</span> Lab</span>
                 </div>
                 <div class="hidden md:flex items-center space-x-8 text-sm font-medium">
-                    <a href="#about" class="text-gray-300 hover:text-white transition">About</a>
-                    <a href="#criteria" class="text-gray-300 hover:text-white transition">Criteria</a>
-                    <a href="#problems" class="text-gray-300 hover:text-white transition">Research Areas</a>
-                    <a href="#benefits" class="text-gray-300 hover:text-white transition">Benefits</a>
-                    <a href="#portfolio" class="text-gray-300 hover:text-white transition">Portfolio</a>
-                    <a href="#apply" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Apply Now</a>
+                    <a href="#about" class="text-gray-300 hover:text-white transition duration-300">About</a>
+                    <a href="#criteria" class="text-gray-300 hover:text-white transition duration-300">Criteria</a>
+                    <a href="#problems" class="text-gray-300 hover:text-white transition duration-300">Research Areas</a>
+                    <a href="#benefits" class="text-gray-300 hover:text-white transition duration-300">Benefits</a>
+                    <a href="#portfolio" class="text-gray-300 hover:text-white transition duration-300">Portfolio</a>
+                    <a href="#apply" class="bg-blue-600 text-white px-5 py-2.5 rounded-md hover:bg-blue-700 transition duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40">Apply Now</a>
                 </div>
                  <div class="md:hidden">
                     <button id="mobile-menu-button" class="text-white focus:outline-none">
@@ -110,32 +160,32 @@
             </div>
         </nav>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-black/90 backdrop-blur-sm">
+        <div id="mobile-menu" class="hidden md:hidden bg-black/90 backdrop-blur-md">
             <a href="#about" class="block text-gray-300 hover:text-white transition px-4 py-3">About</a>
             <a href="#criteria" class="block text-gray-300 hover:text-white transition px-4 py-3">Criteria</a>
             <a href="#problems" class="block text-gray-300 hover:text-white transition px-4 py-3">Research Areas</a>
             <a href="#benefits" class="block text-gray-300 hover:text-white transition px-4 py-3">Benefits</a>
             <a href="#portfolio" class="block text-gray-300 hover:text-white transition px-4 py-3">Portfolio</a>
-            <a href="#apply" class="block bg-blue-600 text-white px-4 py-3 mt-2 font-bold">Apply Now</a>
+            <a href="#apply" class="block bg-blue-600 text-white px-4 py-3 mt-2 font-bold text-center">Apply Now</a>
         </div>
     </header>
 
     <main>
         <!-- Hero Section -->
-        <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
-             <canvas id="starfield-canvas"></canvas>
+        <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden hero-bg-animated">
+             <canvas id="hero-canvas"></canvas>
             <div class="text-center px-4 z-10 relative">
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter leading-tight">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter leading-tight animate-fade-in-down">
                     A Call for the <span class="gradient-text">Uncommon Mind</span>
                 </h1>
-                <p class="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-gray-300">
+                <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-300 animate-fade-in-up" style="animation-delay: 0.3s;">
                     This is not a call for students. This is a call for anomalies. For those who don't just learn knowledge—they build new ways of knowing.
                 </p>
-                <div class="mt-8 flex justify-center gap-4">
-                    <a href="#about" class="bg-white text-black font-semibold px-6 py-3 rounded-md hover:bg-gray-200 transition-transform hover:scale-105">
+                <div class="mt-10 flex flex-col sm:flex-row justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.6s;">
+                    <a href="#about" class="bg-white text-black font-semibold px-8 py-3 rounded-lg hover:bg-gray-200 transition-transform hover:scale-105 shadow-2xl shadow-white/10">
                         Discover the Lab
                     </a>
-                    <a href="#apply" class="border border-gray-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-gray-800 transition-transform hover:scale-105">
+                    <a href="#apply" class="border border-gray-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-gray-800/50 hover:border-blue-500 transition-all hover:scale-105">
                         Application Portal
                     </a>
                 </div>
@@ -143,13 +193,13 @@
         </section>
 
         <!-- About Section -->
-        <section id="about" class="py-20 sm:py-32 fade-in-section">
+        <section id="about" class="py-24 sm:py-32 fade-in-section">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Advanced Interdisciplinary Research</h2>
-                    <p class="mt-4 text-lg text-gray-400">Bridging science, technology, and society to solve the world's most complex challenges.</p>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white">Advanced Interdisciplinary Research</h2>
+                    <p class="mt-6 text-lg text-gray-400 max-w-3xl mx-auto">Bridging science, technology, and society to solve the world's most complex challenges.</p>
                 </div>
-                <div class="mt-16 grid md:grid-cols-2 gap-8 items-center">
+                <div class="mt-20 grid md:grid-cols-2 gap-8 items-center">
                     <div class="glass-card p-8 rounded-2xl">
                         <h3 class="text-2xl font-bold text-white">About the Lab</h3>
                         <p class="mt-4 text-gray-300">
@@ -167,9 +217,9 @@
         </section>
         
         <!-- Mission Section -->
-        <section class="py-20 sm:py-32 bg-gray-900 fade-in-section">
+        <section class="py-24 sm:py-32 bg-gray-900/50 fade-in-section">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                 <h2 class="text-lg font-semibold text-blue-400">Our Mission</h2>
+                 <h2 class="text-lg font-semibold text-blue-400 uppercase tracking-wider">Our Mission</h2>
                 <blockquote class="mt-4 text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
                     "To accelerate human civilization through interdisciplinary intelligence and systemic problem solving."
                 </blockquote>
@@ -177,28 +227,28 @@
         </section>
 
         <!-- Membership Criteria Section -->
-        <section id="criteria" class="py-20 sm:py-32 fade-in-section">
+        <section id="criteria" class="py-24 sm:py-32 fade-in-section">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Membership Criteria</h2>
-                    <p class="mt-4 text-lg text-gray-400">We seek anomalies through two distinct pathways.</p>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white">Membership Criteria</h2>
+                    <p class="mt-6 text-lg text-gray-400">We seek anomalies through two distinct pathways.</p>
                 </div>
-                <div class="mt-16 grid lg:grid-cols-2 gap-8">
+                <div class="mt-20 grid lg:grid-cols-2 gap-8">
                     <!-- Standard Path Card -->
                     <div class="glass-card p-8 rounded-2xl border-2 border-blue-500/50 flex flex-col">
                         <h3 class="text-2xl font-bold gradient-text">Standard Path</h3>
                         <p class="mt-2 text-gray-400">For candidates who fulfill all three requirements.</p>
                         <ul class="mt-6 space-y-4 text-gray-300 flex-grow">
                             <li class="flex items-start">
-                                <svg class="w-6 h-6 text-blue-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                <svg class="w-6 h-6 text-blue-400 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                                 <span><strong>Official IQ Score > 140:</strong> Documented results from recognized assessments (Mensa, WAIS-IV, etc.).</span>
                             </li>
                             <li class="flex items-start">
-                                <svg class="w-6 h-6 text-blue-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                <svg class="w-6 h-6 text-blue-400 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                 <span><strong>Mastery of 3+ Disciplines:</strong> At least one from the Core Six (Maths, CS, Physics, Medicine, Psychology, Econ). Evidence required.</span>
                             </li>
                             <li class="flex items-start">
-                                <svg class="w-6 h-6 text-blue-400 mr-3 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                                <svg class="w-6 h-6 text-blue-400 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
                                 <span><strong>History of Original Thought:</strong> Demonstrable creation of frameworks, systems, or independent research.</span>
                             </li>
                         </ul>
@@ -224,26 +274,26 @@
         </section>
 
         <!-- Problems We Address Section -->
-        <section id="problems" class="py-20 sm:py-32 bg-gray-900 fade-in-section">
+        <section id="problems" class="py-24 sm:py-32 bg-gray-900/50 fade-in-section">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Problems We Address</h2>
-                    <p class="mt-4 text-lg text-gray-400">A selection of challenges we are exploring. We highly encourage proposing your own.</p>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white">Problems We Address</h2>
+                    <p class="mt-6 text-lg text-gray-400 max-w-3xl mx-auto">A selection of challenges we are exploring. We highly encourage proposing your own.</p>
                 </div>
-                <div id="problems-accordion-container" class="mt-16 max-w-4xl mx-auto space-y-4">
+                <div id="problems-accordion-container" class="mt-20 max-w-4xl mx-auto space-y-4">
                     <!-- Accordion items are dynamically injected by JavaScript -->
                 </div>
             </div>
         </section>
         
         <!-- Member Benefits Section -->
-        <section id="benefits" class="py-20 sm:py-32 fade-in-section">
+        <section id="benefits" class="py-24 sm:py-32 fade-in-section">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">An Environment for Accelerated Growth</h2>
-                    <p class="mt-4 text-lg text-gray-400">We provide the resources, network, and platform for profound impact.</p>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white">An Environment for Accelerated Growth</h2>
+                    <p class="mt-6 text-lg text-gray-400 max-w-3xl mx-auto">We provide the resources, network, and platform for profound impact.</p>
                 </div>
-                <div class="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="mt-20 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Benefit Cards -->
                     <div class="glass-card p-6 rounded-xl">
                         <h3 class="text-xl font-bold text-white">Expert Mentorship</h3>
@@ -274,31 +324,31 @@
         </section>
 
         <!-- Portfolio for Excellence Section -->
-        <section id="portfolio" class="py-20 sm:py-32 bg-gray-900 fade-in-section">
+        <section id="portfolio" class="py-24 sm:py-32 bg-gray-900/50 fade-in-section">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">A Portfolio for Global Excellence</h2>
-                    <p class="mt-4 text-lg max-w-3xl mx-auto text-gray-400">Our members produce research and publications suitable for applications to the world's most selective universities.</p>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white">A Portfolio for Global Excellence</h2>
+                    <p class="mt-6 text-lg max-w-3xl mx-auto text-gray-400">Our members produce research and publications suitable for applications to the world's most selective universities.</p>
                 </div>
                 <div class="mt-16">
-                    <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-6 md:gap-x-12">
+                    <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-6 md:gap-x-16">
                         <!-- University Logos -->
-                        <div title="MIT" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                        <div title="MIT" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110" style="filter: drop-shadow(0 0 5px rgba(255,255,255,0)); hover:filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));">
                              <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>MIT</title><path d="M3.52 17.373h2.112v-3.32h.048c.232.736.56 1.344.984 1.824s.92.864 1.488 1.152.98.432 1.44.432c.576 0 1.028-.12 1.356-.36s.524-.6.524-1.08v-5.088h2.112v5.136c0 .936-.26 1.688-.78 2.256s-1.216.852-2.088.852c-.624 0-1.164-.168-1.62-.504s-.84-.816-1.128-1.44h-.048v1.8h-2.112v-8.88h2.112v3.312h.048c.24-.744.572-1.356.996-1.836s.924-.864 1.49-.152.98-.432 1.44-.432c.576 0 1.028-.12 1.356-.36s.524-.6.524-1.08v-5.088h2.112v5.136c0 .936-.26 1.688-.78 2.256s-1.216.852-2.088.852c-.624 0-1.164-.168-1.62-.504s-.84-.816-1.128-1.44h-.048v1.8h-2.112v-8.88zm8.688 0h2.112v-8.88h-2.112v8.88zm5.688-8.88v8.88h2.112v-6.768h.048l2.256 6.768h2.352l2.256-6.768h.048v6.768h2.112v-8.88h-3.528l-2.208 6.576h-.048L19.16 8.493z"/></svg>
                         </div>
-                        <div title="Harvard University" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                        <div title="Harvard University" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
                             <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>Harvard University</title><path d="M24 8.241v7.518c0 .247-.043.402-.128.468s-.213.1-.384.1H.512c-.17 0-.3-.034-.384-.1S0 16.006 0 15.759V8.241c0-.248.043-.403.128-.468s.214-.1.384-.1h23c.17 0 .3.034.384.1s.128.22.128.468zm-8.24 6.275h-1.63V9.74h1.63zm-3.263 0h-1.63V9.74h1.63zm-3.261 0h-1.63V9.74h1.63zm-3.262 0H3.26V9.74h1.63zm13.048 0h-1.63V9.74h1.63zM1.025 8.754v6.002h.63v-6.002zm21.32 0v6.002h.63v-6.002zM12 7.028a.512.512 0 0 1-.384-.17L1.388 1.452a.513.513 0 0 1 0-.728L1.92.192a.512.512 0 0 1 .728 0L12 8.44l9.352-8.248a.513.513 0 0 1 .728 0l.532.532a.512.512 0 0 1 0 .728L12.384 6.858a.512.512 0 0 1-.384.17z"/></svg>
                         </div>
-                         <div title="University of Oxford" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                         <div title="University of Oxford" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
                              <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>University of Oxford</title><path d="M12.001 0C8.204 0 5.122 3.081 5.122 6.878c0 .32.023.633.066.942l.011.083H5.12c-1.39 0-2.517 1.127-2.517 2.517v4.16c0 1.39 1.127 2.518 2.518 2.518h.078l.01-.082c.045.31.067.623.067.943C5.26 20.92 8.342 24 12.14 24c3.796 0 6.877-3.08 6.877-6.877 0-.32-.023-.633-.066-.943l-.011-.082h.078c1.39 0 2.518-1.128 2.518-2.518v-4.16c0-1.39-1.128-2.517-2.518-2.517h-.078l-.01.083c-.045-.31-.067-.623-.067-.943C18.878 3.08 15.797 0 12.001 0zm-.001 2.373c2.49 0 4.504 2.015 4.504 4.505s-2.015 4.505-4.504 4.505-4.505-2.015-4.505-4.505S9.51 2.373 12 2.373zm-6.606 7.02h.384v5.214h-.384zm13.212 0h-.384v5.214h.384zM12.001 12.74c2.49 0 4.504 2.014 4.504 4.504s-2.015 4.505-4.504 4.505-4.505-2.015-4.505-4.505 2.015-4.504 4.505-4.504z"/></svg>
                         </div>
-                        <div title="University of Cambridge" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                        <div title="University of Cambridge" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
                              <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>University of Cambridge</title><path d="M22.396 18.327c-.378-1.137-.84-2.22-1.386-3.249l-.162-.315c-.45-.873-.936-1.71-1.44-2.502-.513-.792-1.044-1.53-1.593-2.205-.54-.666-1.089-1.26-1.647-1.782-.558-.522-1.116-1.008-1.674-1.431l.243.207c.279.243.567.486.864.738.297.252.603.513.918.783l.18.153.36.324.18.153c.27.234.54.468.81.702.27.234.522.459.756.675l.09.081.27.252.27.261.27.27.09.09c.27.27.522.54.756.81l.09.09c.18.18.342.36.486.54l.09.108c.18.27.342.54.486.81.054.108.09.198.126.297l.072.198c.063.18.126.369.18.558l.054.18c.054.18.09.36.126.54l.036.162.036.18c.027.18.054.36.072.54l.018.144c0 .09 0 .18.018.27v.18c0 .09 0 .18.018.27 0 .09 0 .18 0 .27zm-11.43 1.341c.27.18.54.342.81.486.27.144.54.27.81.387l.27.09c.27.09.522.162.783.216.261.054.513.09.765.126h.27c.252 0 .495-.036.738-.072l.27-.054c.252-.054.495-.126.738-.207l.261-.09c.252-.09.495-.198.729-.315.234-.117.459-.243.675-.387l.09-.063c.18-.126.36-.261.522-.405.162-.144.315-.297.459-.459.144-.162.27-.333.387-.513.117-.18.216-.369.315-.567.09-.198.18-.405.252-.612l.063-.207c.054-.18.09-.369.126-.558.036-.189.063-.387.081-.585v-.288c0-.288-.036-.567-.09-.846-.054-.27-.126-.54-.216-.81l-.09-.27c-.09-.27-.198-.531-.315-.792l-.117-.261c-.117-.261-.243-.513-.378-.765-.135-.252-.279-.504-.432-.747-.153-.243-.315-.486-.486-.72-.18-.234-.36-.459-.54-.675-.18-.216-.369-.432-.558-.639-.189-.207-.387-.405-.585-.603-.198-.198-.405-.387-.612-.567-.207-.18-.423-.351-.639-.513l-.216-.162c-.225-.162-.45-.315-.675-.459-.225-.144-.45-.279-.684-.405-.234-.126-.468-.243-.702-.351l-1.026-1.116c-.279-.288-.567-.567-.864-.837-.297-.27-.603-.522-.918-.765l-.63-.486c-.315-.243-.639-.468-.972-.684-.333-.216-.675-.414-1.026-.594l-.36-.189c-.351-.18-.702-.342-1.062-.486l-.369-.144c-.36-.135-.729-.252-1.107-.351-.378-.099-.765-.18-1.161-.234L12 1.359l-.36.018c-.396.054-.783.135-1.161.234-.378.099-.747.216-1.107.351l-.369.144c-.36.144-.711.306-1.062.486l-.36.189c-.351.18-.693.378-1.026.594-.333.216-.657.441-.972.684l-.63.486c-.315.243-.621.495-.918.765-.297.27-.585.549-.864.837l-1.026 1.116c-.234.108-.468.225-.702.351-.234.126-.459.261-.684.405-.225.144-.45.297-.675.459l-.216.162c-.216.162-.423.333-.639.513-.207.18-.414.369-.612.567-.198.198-.387.396-.585.603-.189.207-.378.414-.558.639-.18.216-.36.441-.54.675-.18.234-.333.477-.486.72-.153.243-.3.495-.432.747-.135.252-.261.504-.378.765l-.117.261c-.117.27-.216.54-.315.792l-.09.27c-.09.27-.162.54-.216.81-.054.279-.09.558-.09.846v.288c0 .198.018.396.081.585.063.189.126.369.126.558l.063.207c.09.207.18.414.252.612.099.198.198.387.315.567.117.18.243.351.387.513.144.162.315.315.459.459.162.144.342.279.522.405l.09.063c.216.144.441.261.675.387.234.117.477.216.729.315l.261.09c.243.072.486.153.738.207l.27.054c.243.036.486.072.738.072h.27c.252-.036.504-.072.765-.126.261-.054.513-.126.783-.216l.27-.09c.27-.117.54-.243.81-.387.27-.18.54-.36.81-.486zm0 0"/></svg>
                         </div>
-                        <div title="ETH Zurich" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                        <div title="ETH Zurich" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
                              <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>ETH Zurich</title><path d="M21.258.012v9.31h-4.332v3.742h4.332v6.602h-4.332v4.322H.012V.012h21.246zM2.742 21.258h11.442v-4.322H2.742v4.322zm15.774-6.602v-3.74h-4.332V2.742H2.742v11.914h15.774zm-4.332-8.586v3.74H5.472v-3.74h8.712z"/></svg>
                         </div>
-                        <div title="National University of Singapore" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300">
+                        <div title="National University of Singapore" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
                            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>National University of Singapore</title><path d="M22.909.002H1.09A1.09 1.09 0 0 0 0 1.093v21.815A1.09 1.09 0 0 0 1.09 24h21.82a1.09 1.09 0 0 0 1.09-1.092V1.093A1.09 1.09 0 0 0 22.908.002zM7.34 16.96h2.182v-3.72h3.272v3.72h2.182V7.04h-2.182v3.46h-3.272V7.04H7.34v9.92zM2.18 21.817V2.183h2.183v19.634H2.18zm17.457 0H5.454V19.63h14.183v2.187z"/></svg>
                         </div>
                     </div>
@@ -307,31 +357,31 @@
         </section>
 
         <!-- Is This For You? Section -->
-        <section class="py-20 sm:py-32 bg-gray-900 fade-in-section">
+        <section class="py-24 sm:py-32 bg-gray-900/50 fade-in-section">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold tracking-tight text-white">Is This For You?</h2>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white">Is This For You?</h2>
                 </div>
                 <div class="mt-12 flow-root">
                     <div class="-my-8 divide-y divide-gray-700">
                         <!-- Table-like rows -->
-                        <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-4">
+                        <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-6">
                             <p class="font-semibold text-white">If you think faster than your teachers...</p>
                             <p class="text-gray-400 md:text-right">...then you're not alone here.</p>
                         </div>
-                        <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-4">
+                        <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-6">
                             <p class="font-semibold text-white">If you feel out of place in academic routines...</p>
                             <p class="text-gray-400 md:text-right">...then this is your new rhythm.</p>
                         </div>
-                         <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-4">
+                         <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-6">
                             <p class="font-semibold text-white">If you see patterns across math, medicine, and society...</p>
                             <p class="text-gray-400 md:text-right">...then here, that's the starting point.</p>
                         </div>
-                         <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-4">
+                         <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-6">
                             <p class="font-semibold text-white">If you build ideas that others call "too ambitious"...</p>
                             <p class="text-gray-400 md:text-right">...then we call them "essential".</p>
                         </div>
-                         <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-4">
+                         <div class="py-8 grid md:grid-cols-2 gap-4 items-center transition duration-300 hover:bg-gray-800/50 rounded-lg px-6">
                             <p class="font-semibold text-white">If you want to work with minds at all academic levels...</p>
                             <p class="text-gray-400 md:text-right">...then cross-pollination of ideas awaits.</p>
                         </div>
@@ -341,11 +391,11 @@
         </section>
 
         <!-- Apply Section -->
-        <section id="apply" class="py-20 sm:py-32 fade-in-section">
+        <section id="apply" class="py-24 sm:py-32 fade-in-section">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="glass-card rounded-2xl p-8 md:p-12 lg:p-16 text-center border-2 border-blue-500/50">
-                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-white">Submit Your Application</h2>
-                    <p class="mt-4 text-lg text-gray-400">We don't care about your GPA — we care about your thinking.</p>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-white">Submit Your Application</h2>
+                    <p class="mt-6 text-lg text-gray-400">We don't care about your GPA — we care about your thinking.</p>
                     
                     <div class="mt-8 text-left max-w-2xl mx-auto">
                         <p class="text-2xl font-bold text-center text-red-400">Deadline: October 31, 2025</p>
@@ -362,7 +412,7 @@
                     </div>
 
                     <div class="mt-10">
-                        <a href="#" class="inline-block bg-blue-600 text-white font-bold text-lg px-10 py-4 rounded-lg hover:bg-blue-700 transition-transform hover:scale-105">
+                        <a href="#" class="inline-block bg-blue-600 text-white font-bold text-lg px-10 py-4 rounded-lg hover:bg-blue-700 transition-transform hover:scale-105 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50">
                             Submit Your Application Online
                         </a>
                         <p class="text-xs text-gray-500 mt-2">(Detailed application portal link will be provided)</p>
@@ -375,7 +425,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-gray-800">
+    <footer class="bg-gray-900/50 border-t border-gray-800">
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
             <h3 class="text-2xl font-bold text-white">Questions?</h3>
             <p class="mt-4 text-gray-400">
@@ -389,17 +439,19 @@
 
 
     <script>
-        // JavaScript for website functionality
-
-        // --- Starfield Animation for Hero Section ---
-        const canvas = document.getElementById('starfield-canvas');
+        // ========================================
+        // Main JavaScript for Website Functionality
+        // ========================================
+        
+        // --- Enhanced Starfield Animation for Hero Section ---
+        const canvas = document.getElementById('hero-canvas');
         if (canvas) {
             const ctx = canvas.getContext('2d');
             
             let stars;
-            const numStars = 200;
-            const maxStarSize = 2.5;
-            const minStarSize = 0.5;
+            const numStars = 300; // Increased star count
+            const maxStarSize = 3;
+            const minStarSize = 0.2; // Smaller minimum size for depth
 
             function setCanvasSize() {
                 canvas.width = window.innerWidth;
@@ -412,8 +464,9 @@
                     this.y = y;
                     this.size = size;
                     this.speed = speed;
-                    this.opacity = Math.random() * 0.5 + 0.5;
-                    this.opacityDirection = 1;
+                    // Opacity tied to size for a more realistic twinkle
+                    this.opacity = (size / maxStarSize) * 0.7 + 0.3;
+                    this.opacityDirection = Math.random() > 0.5 ? 1 : -1;
                 }
 
                 draw() {
@@ -429,10 +482,12 @@
                         this.y = -this.size;
                         this.x = Math.random() * canvas.width;
                     }
+
+                    // Twinkle effect
                     if (this.opacityDirection === 1) {
-                        if (this.opacity < 1) { this.opacity += 0.005; } else { this.opacityDirection = -1; }
+                        if (this.opacity < 1) { this.opacity += 0.003; } else { this.opacityDirection = -1; }
                     } else {
-                        if (this.opacity > 0.1) { this.opacity -= 0.005; } else { this.opacityDirection = 1; }
+                        if (this.opacity > 0.2) { this.opacity -= 0.003; } else { this.opacityDirection = 1; }
                     }
                     this.draw();
                 }
@@ -443,7 +498,7 @@
                 stars = [];
                 for (let i = 0; i < numStars; i++) {
                     const size = Math.random() * (maxStarSize - minStarSize) + minStarSize;
-                    const speed = size / 2 * 0.15;
+                    const speed = size / 3; // Speed is proportional to size for parallax
                     const x = Math.random() * canvas.width;
                     const y = Math.random() * canvas.height;
                     stars.push(new Star(x, y, size, speed));
@@ -463,8 +518,9 @@
             animateStars();
         }
 
-        // --- Other Functionality ---
+        // --- Other Site Functionality ---
         document.addEventListener('DOMContentLoaded', () => {
+
             // 1. Mobile Menu Toggle
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -485,16 +541,16 @@
             if(header) {
                 window.addEventListener('scroll', () => {
                     if (window.scrollY > 50) {
-                        header.classList.add('bg-black/70', 'backdrop-blur-sm');
+                        header.classList.add('bg-black/80', 'backdrop-blur-lg', 'shadow-lg', 'shadow-black/20');
                     } else {
-                        header.classList.remove('bg-black/70', 'backdrop-blur-sm');
+                        header.classList.remove('bg-black/80', 'backdrop-blur-lg', 'shadow-lg', 'shadow-black/20');
                     }
                 });
             }
 
             // 3. Data and Logic for "Problems We Address" Accordion
             const problemsData = [
-                {
+                 {
                     title: "I. Fundamental Mathematical & Theoretical Problems",
                     items: ["P vs NP Problem", "Hodge Conjecture", "Riemann Hypothesis", "Navier-Stokes Existence and Smoothness", "Yang-Mills Existence and Mass Gap", "Birch and Swinnerton-Dyer Conjecture", "Poincaré Conjecture Generalizations", "Collatz Conjecture", "Goldbach Conjecture", "Twin Prime Conjecture", "Continuum Hypothesis", "Incompleteness Navigation Framework"]
                 },
@@ -534,7 +590,7 @@
 
             const accordionContainer = document.getElementById('problems-accordion-container');
             if (accordionContainer) {
-                accordionContainer.innerHTML = ''; // Clear just in case
+                accordionContainer.innerHTML = ''; // Clear for safety
                 problemsData.forEach((category) => {
                     const accordionItem = document.createElement('div');
                     accordionItem.className = 'glass-card rounded-xl overflow-hidden';
@@ -542,14 +598,14 @@
                     const button = document.createElement('button');
                     button.className = 'w-full text-left p-5 flex justify-between items-center font-bold text-white hover:bg-gray-800/50 transition';
                     button.innerHTML = `
-                        <span class="pr-4">${category.title}</span>
-                        <svg class="w-6 h-6 transform transition-transform duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <span class="pr-4 text-lg">${category.title}</span>
+                        <svg class="w-6 h-6 transform transition-transform duration-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     `;
                     
                     const content = document.createElement('div');
                     content.className = 'accordion-content';
                     const innerContent = document.createElement('div');
-                    innerContent.className = 'p-5 border-t border-gray-700';
+                    innerContent.className = 'p-5 border-t border-gray-700/50';
                     const list = document.createElement('ul');
                     list.className = 'grid sm:grid-cols-2 gap-x-8 gap-y-2 text-gray-400 list-disc list-inside';
                     category.items.forEach(itemText => {
@@ -565,20 +621,22 @@
 
                     button.addEventListener('click', () => {
                         const icon = button.querySelector('svg');
-                        const isOpening = !content.style.maxHeight;
+                        const isOpening = !content.style.maxHeight || content.style.maxHeight === '0px';
 
+                        // Close all other accordions
                         document.querySelectorAll('#problems-accordion-container .accordion-content').forEach(acc => {
                             if (acc !== content) {
-                                acc.style.maxHeight = null;
+                                acc.style.maxHeight = '0px';
                                 acc.previousElementSibling.querySelector('svg').classList.remove('rotate-180');
                             }
                         });
 
+                        // Toggle the clicked one
                         if (isOpening) {
                             content.style.maxHeight = content.scrollHeight + "px";
                             icon.classList.add('rotate-180');
                         } else {
-                            content.style.maxHeight = null;
+                            content.style.maxHeight = '0px';
                             icon.classList.remove('rotate-180');
                         }
                     });
@@ -587,20 +645,29 @@
 
             // 4. Fade-in on Scroll Animation
             const sections = document.querySelectorAll('.fade-in-section');
-            const observer = new IntersectionObserver((entries, observer) => {
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
                         observer.unobserve(entry.target);
                     }
                 });
-            }, {
-                rootMargin: '0px',
-                threshold: 0.1
-            });
+            }, { threshold: 0.15 });
 
             sections.forEach(section => {
                 observer.observe(section);
+            });
+            
+            // 5. Card Mouse Follow Effect
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
             });
         });
 
