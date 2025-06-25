@@ -118,6 +118,16 @@
             height: 100%;
             z-index: 1;
         }
+
+        /* Mobile Menu Blur Effect */
+        .content-blur {
+            filter: blur(5px);
+            transition: filter 0.3s ease-in-out;
+            pointer-events: none; /* Disable interaction with blurred content */
+        }
+        #menu-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
     </style>
 </head>
 
@@ -139,7 +149,7 @@
                     <a href="#apply" class="bg-blue-600 text-white px-5 py-2.5 rounded-md hover:bg-blue-700 transition duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40">Apply Now</a>
                 </div>
                  <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none z-50 relative">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                     </button>
                 </div>
@@ -155,8 +165,11 @@
             <a href="#apply" class="block bg-blue-600 text-white px-4 py-3 mt-2 font-bold text-center">Apply Now</a>
         </div>
     </header>
+    
+    <!-- Menu Overlay for Mobile -->
+    <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-40 hidden"></div>
 
-    <main>
+    <main id="main-content">
         <!-- Hero Section -->
         <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
              <canvas id="particle-canvas"></canvas>
@@ -449,8 +462,7 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900/50 border-t border-gray-800">
+    <footer id="footer" class="bg-gray-900/50 border-t border-gray-800">
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
             <h3 class="text-2xl font-bold text-white">Questions?</h3>
             <p class="mt-4 text-gray-400">
@@ -599,18 +611,47 @@
         // --- Other Site Functionality (Menu, Header, Accordion, etc.) ---
         document.addEventListener('DOMContentLoaded', () => {
 
-            // 1. Mobile Menu Toggle
+            // 1. Mobile Menu Toggle with Blur Effect
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            if(mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                });
+            const menuOverlay = document.getElementById('menu-overlay');
+            const mainContent = document.getElementById('main-content');
+            const footer = document.getElementById('footer');
+
+            function toggleMenu() {
+                const isMenuOpen = !mobileMenu.classList.contains('hidden');
+                mobileMenu.classList.toggle('hidden');
+                
+                if (isMenuOpen) {
+                    // Closing menu
+                    menuOverlay.classList.add('hidden');
+                    mainContent.classList.remove('content-blur');
+                    footer.classList.remove('content-blur');
+                } else {
+                    // Opening menu
+                    menuOverlay.classList.remove('hidden');
+                    mainContent.classList.add('content-blur');
+                    footer.classList.add('content-blur');
+                }
+            }
+
+            if(mobileMenuButton && mobileMenu && menuOverlay && mainContent && footer) {
+                mobileMenuButton.addEventListener('click', toggleMenu);
+                
                 const mobileNavLinks = mobileMenu.querySelectorAll('a');
                 mobileNavLinks.forEach(link => {
                     link.addEventListener('click', () => {
-                        mobileMenu.classList.add('hidden');
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            toggleMenu();
+                        }
                     });
+                });
+
+                // Also close menu if overlay is clicked
+                menuOverlay.addEventListener('click', () => {
+                     if (!mobileMenu.classList.contains('hidden')) {
+                        toggleMenu();
+                    }
                 });
             }
 
