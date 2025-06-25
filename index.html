@@ -109,8 +109,8 @@
             transform: translateY(0);
         }
 
-        /* Canvas for hero background animation */
-        #hero-canvas {
+        /* Canvas for particle animation */
+        #particle-canvas {
             position: absolute;
             top: 0;
             left: 0;
@@ -118,20 +118,6 @@
             height: 100%;
             z-index: 1;
         }
-        
-        /* Animated background for the hero section */
-        .hero-bg-animated {
-            background: linear-gradient(-45deg, #0a0a0a, #0d1a3a, #0a0a0a, #2a0d3a);
-            background-size: 400% 400%;
-            animation: gradientBG 25s ease infinite;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
     </style>
 </head>
 
@@ -172,8 +158,8 @@
 
     <main>
         <!-- Hero Section -->
-        <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden hero-bg-animated">
-             <canvas id="hero-canvas"></canvas>
+        <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+             <canvas id="particle-canvas"></canvas>
             <div class="text-center px-4 z-10 relative">
                 <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tighter leading-tight animate-fade-in-down">
                     A Call for the <span class="gradient-text">Uncommon Mind</span>
@@ -343,7 +329,7 @@
                              <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>University of Oxford</title><path d="M12.001 0C8.204 0 5.122 3.081 5.122 6.878c0 .32.023.633.066.942l.011.083H5.12c-1.39 0-2.517 1.127-2.517 2.517v4.16c0 1.39 1.127 2.518 2.518 2.518h.078l.01-.082c.045.31.067.623.067.943C5.26 20.92 8.342 24 12.14 24c3.796 0 6.877-3.08 6.877-6.877 0-.32-.023-.633-.066-.943l-.011-.082h.078c1.39 0 2.518-1.128 2.518-2.518v-4.16c0-1.39-1.128-2.517-2.518-2.517h-.078l-.01.083c-.045-.31-.067-.623-.067-.943C18.878 3.08 15.797 0 12.001 0zm-.001 2.373c2.49 0 4.504 2.015 4.504 4.505s-2.015 4.505-4.504 4.505-4.505-2.015-4.505-4.505S9.51 2.373 12 2.373zm-6.606 7.02h.384v5.214h-.384zm13.212 0h-.384v5.214h.384zM12.001 12.74c2.49 0 4.504 2.014 4.504 4.504s-2.015 4.505-4.504 4.505-4.505-2.015-4.505-4.505 2.015-4.504 4.505-4.504z"/></svg>
                         </div>
                         <div title="University of Cambridge" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
-                             <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>University of Cambridge</title><path d="M22.396 18.327c-.378-1.137-.84-2.22-1.386-3.249l-.162-.315c-.45-.873-.936-1.71-1.44-2.502-.513-.792-1.044-1.53-1.593-2.205-.54-.666-1.089-1.26-1.647-1.782-.558-.522-1.116-1.008-1.674-1.431l.243.207c.279.243.567.486.864.738.297.252.603.513.918.783l.18.153.36.324.18.153c.27.234.54.468.81.702.27.234.522.459.756.675l.09.081.27.252.27.261.27.27.09.09c.27.27.522.54.756.81l.09.09c.18.18.342.36.486.54l.09.108c.18.27.342.54.486.81.054.108.09.198.126.297l.072.198c.063.18.126.369.18.558l.054.18c.054.18.09.36.126.54l.036.162.036.18c.027.18.054.36.072.54l.018.144c0 .09 0 .18.018.27v.18c0 .09 0 .18.018.27 0 .09 0 .18 0 .27zm-11.43 1.341c.27.18.54.342.81.486.27.144.54.27.81.387l.27.09c.27.09.522.162.783.216.261.054.513.09.765.126h.27c.252 0 .495-.036.738-.072l.27-.054c.252-.054.495-.126.738-.207l.261-.09c.252-.09.495-.198.729-.315.234-.117.459-.243.675-.387l.09-.063c.18-.126.36-.261.522-.405.162-.144.315-.297.459-.459.144-.162.27-.333.387-.513.117-.18.216-.369.315-.567.09-.198.18-.405.252-.612l.063-.207c.054-.18.09-.369.126-.558.036-.189.063-.387.081-.585v-.288c0-.288-.036-.567-.09-.846-.054-.27-.126-.54-.216-.81l-.09-.27c-.09-.27-.198-.531-.315-.792l-.117-.261c-.117-.261-.243-.513-.378-.765-.135-.252-.279-.504-.432-.747-.153-.243-.315-.486-.486-.72-.18-.234-.36-.459-.54-.675-.18-.216-.369-.432-.558-.639-.189-.207-.387-.405-.585-.603-.198-.198-.405-.387-.612-.567-.207-.18-.423-.351-.639-.513l-.216-.162c-.225-.162-.45-.315-.675-.459-.225-.144-.45-.279-.684-.405-.234-.126-.468-.243-.702-.351l-1.026-1.116c-.279-.288-.567-.567-.864-.837-.297-.27-.603-.522-.918-.765l-.63-.486c-.315-.243-.639-.468-.972-.684-.333-.216-.675-.414-1.026-.594l-.36-.189c-.351-.18-.702-.342-1.062-.486l-.369-.144c-.36-.135-.729-.252-1.107-.351-.378-.099-.765-.18-1.161-.234L12 1.359l-.36.018c-.396.054-.783.135-1.161.234-.378.099-.747.216-1.107.351l-.369.144c-.36.144-.711.306-1.062.486l-.36.189c-.351.18-.693.378-1.026.594-.333.216-.657.441-.972.684l-.63.486c-.315.243-.621.495-.918.765-.297.27-.585.549-.864.837l-1.026 1.116c-.234.108-.468.225-.702.351-.234.126-.459.261-.684.405-.225.144-.45.297-.675.459l-.216.162c-.216.162-.423.333-.639.513-.207.18-.414.369-.612.567-.198.198-.387.396-.585.603-.189.207-.378.414-.558.639-.18.216-.36.441-.54.675-.18.234-.333.477-.486.72-.153.243-.3.495-.432.747-.135.252-.261.504-.378.765l-.117.261c-.117.27-.216.54-.315.792l-.09.27c-.09.27-.162.54-.216.81-.054.279-.09.558-.09.846v.288c0 .198.018.396.081.585.063.189.126.369.126.558l.063.207c.09.207.18.414.252.612.099.198.198.387.315.567.117.18.243.351.387.513.144.162.315.315.459.459.162.144.342.279.522.405l.09.063c.216.144.441.261.675.387.234.117.477.216.729.315l.261.09c.243.072.486.153.738.207l.27.054c.243.036.486.072.738.072h.27c.252-.036.504-.072.765-.126.261-.054.513-.126.783-.216l.27-.09c.27-.117.54-.243.81-.387.27-.18.54-.36.81-.486zm0 0"/></svg>
+                             <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>University of Cambridge</title><path d="M22.396 18.327c-.378-1.137-.84-2.22-1.386-3.249l-.162-.315c-.45-.873-.936-1.71-1.44-2.502-.513-.792-1.044-1.53-1.593-2.205-.54-.666-1.089-1.26-1.647-1.782-.558-.522-1.116-1.008-1.674-1.431l.243.207c.279.243.567.486.864.738.297.252.603.513.918.783l.18.153.36.324.18.153c.27.234.54.468.81.702.27.234.522.459.756.675l.09.081.27.252.27.261.27.27.09.09c.27.27.522.54.756.81l.09.09c.18.18.342.36.486.54l.09.108c.18.27.342.54.486.81.054.108.09.198.126.297l.072.198c.063.18.126.369.18.558l.054.18c.054.18.09.36.126.54l.036.162.036.18c.027.18.054.36.072.54l.018.144c0 .09 0 .18.018.27v.18c0 .09 0 .18.018.27 0 .09 0 .18 0 .27zm-11.43 1.341c.27.18.54.342.81.486.27.144.54.27.81.387l.27.09c.27.09.522.162.783.216.261.054.513.09.765.126h.27c.252 0 .495-.036.738-.072l.27-.054c.252-.054.495-.126.738-.207l.261-.09c.252-.09.495-.198.729-.315.234-.117.459-.243.675-.387l.09-.063c.18-.126.36-.261.522-.405.162-.144.315-.297.459-.459.144-.162.27-.333.387-.513.117-.18.216-.369.315-.567.09-.198.18-.405.252-.612l.063-.207c.054-.18.09-.369.126-.558.036-.189.063-.387.081-.585v-.288c0-.288-.036-.567-.09-.846-.054-.27-.126-.54-.216-.81l-.09-.27c-.09-.27-.198-.531-.315-.792l-.117-.261c-.117-.261-.243-.513-.378-.765-.135-.252-.279-.504-.432-.747-.153-.243-.315-.486-.486-.72-.18-.234-.36-.459-.54-.675-.18-.216-.369-.432-.558-.639-.189-.207-.387-.405-.585-.603-.198-.198-.405-.387-.612-.567-.207-.18-.423-.351-.639-.513l-.216-.162c-.225-.162-.45-.315-.675-.459-.225-.144-.45-.279-.684-.405-.234-.126-.468-.243-.702-.351l-1.026-1.116c-.279-.288-.567-.567-.864-.837-.297-.27-.603-.522-.918-.765l-.63-.486c-.315-.243-.639-.468-.972-.684-.333-.216-.675-.414-1.026-.594l-.36-.189c-.351-.18-.702-.342-1.062-.486l-.369-.144c-.36-.135-.729-.252-1.107-.351-.378-.099-.765-.18-1.161-.234L12 1.359l-.36.018c-.396.054-.783.135-1.161.234-.378.099-.747.216-1.107.351l-.369.144c-.36.144-.711.306-1.062-.486l-.36.189c-.351.18-.693.378-1.026.594-.333.216-.657.441-.972.684l-.63.486c-.315.243-.621.495-.918.765-.297.27-.585.549-.864.837l-1.026 1.116c-.234.108-.468.225-.702.351-.234.126-.459.261-.684.405-.225.144-.45.297-.675.459l-.216.162c-.216.162-.423.333-.639.513-.207.18-.414.369-.612.567-.198.198-.387.396-.585.603-.189.207-.378.414-.558.639-.18.216-.36.441-.54.675-.18.234-.333.477-.486.72-.153.243-.3.495-.432.747-.135.252-.261.504-.378.765l-.117.261c-.117.27-.216.54-.315.792l-.09.27c-.09.27-.162.54-.216.81-.054.279-.09.558-.09.846v.288c0 .198.018.396.081.585.063.189.126.369.126.558l.063.207c.09.207.18.414.252.612.099.198.198.387.315.567.117.18.243.351.387.513.144.162.315.315.459.459.162.144.342.279.522.405l.09.063c.216.144.441.261.675.387.234.117.477.216.729.315l.261.09c.243.072.486.153.738.207l.27.054c.243.036.486.072.738.072h.27c.252-.036.504-.072.765-.126.261-.054.513-.126.783-.216l.27-.09c.27-.117.54-.243.81-.387.27-.18.54-.36.81-.486zm0 0"/></svg>
                         </div>
                         <div title="ETH Zurich" class="h-8 md:h-10 text-gray-500 hover:text-white transition duration-300 transform hover:scale-110">
                              <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><title>ETH Zurich</title><path d="M21.258.012v9.31h-4.332v3.742h4.332v6.602h-4.332v4.322H.012V.012h21.246zM2.742 21.258h11.442v-4.322H2.742v4.322zm15.774-6.602v-3.74h-4.332V2.742H2.742v11.914h15.774zm-4.332-8.586v3.74H5.472v-3.74h8.712z"/></svg>
@@ -443,82 +429,135 @@
         // Main JavaScript for Website Functionality
         // ========================================
         
-        // --- Enhanced Starfield Animation for Hero Section ---
-        const canvas = document.getElementById('hero-canvas');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            
-            let stars;
-            const numStars = 300; // Increased star count
-            const maxStarSize = 3;
-            const minStarSize = 0.2; // Smaller minimum size for depth
+        // --- Particle Network Animation for Hero Section ---
+        const particleCanvas = document.getElementById('particle-canvas');
+        if (particleCanvas) {
+            const ctx = particleCanvas.getContext('2d');
+            particleCanvas.width = window.innerWidth;
+            particleCanvas.height = window.innerHeight;
 
-            function setCanvasSize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
+            let particlesArray;
 
-            class Star {
-                constructor(x, y, size, speed) {
+            let mouse = {
+                x: null,
+                y: null,
+                radius: (particleCanvas.height / 120) * (particleCanvas.width / 120)
+            };
+
+            window.addEventListener('mousemove', function(event) {
+                mouse.x = event.x;
+                mouse.y = event.y;
+            });
+
+            class Particle {
+                constructor(x, y, directionX, directionY, size, color) {
                     this.x = x;
                     this.y = y;
+                    this.directionX = directionX;
+                    this.directionY = directionY;
                     this.size = size;
-                    this.speed = speed;
-                    // Opacity tied to size for a more realistic twinkle
-                    this.opacity = (size / maxStarSize) * 0.7 + 0.3;
-                    this.opacityDirection = Math.random() > 0.5 ? 1 : -1;
+                    this.color = color;
                 }
-
+                
                 draw() {
                     ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                    ctx.fillStyle = 'rgba(59, 130, 246, 0.3)'; // Made particles slightly brighter
                     ctx.fill();
                 }
-
+                
                 update() {
-                    this.y += this.speed;
-                    if (this.y > canvas.height + this.size) {
-                        this.y = -this.size;
-                        this.x = Math.random() * canvas.width;
+                    if (this.x > particleCanvas.width || this.x < 0) {
+                        this.directionX = -this.directionX;
+                    }
+                    if (this.y > particleCanvas.height || this.y < 0) {
+                        this.directionY = -this.directionY;
                     }
 
-                    // Twinkle effect
-                    if (this.opacityDirection === 1) {
-                        if (this.opacity < 1) { this.opacity += 0.003; } else { this.opacityDirection = -1; }
-                    } else {
-                        if (this.opacity > 0.2) { this.opacity -= 0.003; } else { this.opacityDirection = 1; }
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < mouse.radius + this.size) {
+                        if (mouse.x < this.x && this.x < particleCanvas.width - this.size * 10) {
+                            this.x += 5;
+                        }
+                        if (mouse.x > this.x && this.x > this.size * 10) {
+                            this.x -= 5;
+                        }
+                        if (mouse.y < this.y && this.y < particleCanvas.height - this.size * 10) {
+                            this.y += 5;
+                        }
+                        if (mouse.y > this.y && this.y > this.size * 10) {
+                            this.y -= 5;
+                        }
                     }
+                    this.x += this.directionX;
+                    this.y += this.directionY;
                     this.draw();
                 }
             }
+            
+            function initParticles() {
+                particlesArray = [];
+                let numberOfParticles = (particleCanvas.height * particleCanvas.width) / 9000;
+                for (let i = 0; i < numberOfParticles; i++) {
+                    let size = (Math.random() * 2) + 1;
+                    let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                    let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                    let directionX = (Math.random() * .4) - 0.2;
+                    let directionY = (Math.random() * .4) - 0.2;
+                    let color = '#FFFFFF';
 
-            function initStars() {
-                setCanvasSize();
-                stars = [];
-                for (let i = 0; i < numStars; i++) {
-                    const size = Math.random() * (maxStarSize - minStarSize) + minStarSize;
-                    const speed = size / 3; // Speed is proportional to size for parallax
-                    const x = Math.random() * canvas.width;
-                    const y = Math.random() * canvas.height;
-                    stars.push(new Star(x, y, size, speed));
+                    particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
                 }
             }
 
-            function animateStars() {
-                requestAnimationFrame(animateStars);
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if (stars) {
-                    stars.forEach(star => star.update());
+            function animateParticles() {
+                requestAnimationFrame(animateParticles);
+                ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                }
+                connectParticles();
+            }
+
+            function connectParticles() {
+                let opacityValue = 1;
+                for (let a = 0; a < particlesArray.length; a++) {
+                    for (let b = a; b < particlesArray.length; b++) {
+                        let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) +
+                                     ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                        if (distance < (particleCanvas.width / 7) * (particleCanvas.height / 7)) {
+                            opacityValue = 1 - (distance / 20000);
+                            ctx.strokeStyle = 'rgba(139, 92, 246, ' + opacityValue * 0.2 + ')'; // Made lines slightly brighter
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                            ctx.stroke();
+                        }
+                    }
                 }
             }
 
-            window.addEventListener('resize', initStars);
-            initStars();
-            animateStars();
+            window.addEventListener('resize', function() {
+                particleCanvas.width = innerWidth;
+                particleCanvas.height = innerHeight;
+                mouse.radius = (particleCanvas.height / 120) * (particleCanvas.width / 120);
+                initParticles();
+            });
+
+            window.addEventListener('mouseout', function() {
+                mouse.x = undefined;
+                mouse.y = undefined;
+            });
+
+            initParticles();
+            animateParticles();
         }
 
-        // --- Other Site Functionality ---
+        // --- Other Site Functionality (Menu, Header, Accordion, etc.) ---
         document.addEventListener('DOMContentLoaded', () => {
 
             // 1. Mobile Menu Toggle
